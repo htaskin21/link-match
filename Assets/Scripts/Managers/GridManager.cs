@@ -47,6 +47,18 @@ namespace Managers
             UpdateMatchCache();
         }
 
+        public void CheckMatch(List<LinkableChip> link)
+        {
+            foreach (var chip in link)
+            {
+                RemoveItemAt(chip.Position); // grid’den çıkar
+                _linkableChipPool.ReturnToPool(chip); // havuza geri ver
+            }
+
+            _gravityController.ApplyGravity(this, transform.position)
+                .OnComplete(RefillAfterGravity);
+        }
+        
         private void CheckMatch(Chip clickedChip)
         {
             var group = GetMatchedGroupIfAny(clickedChip.Position);

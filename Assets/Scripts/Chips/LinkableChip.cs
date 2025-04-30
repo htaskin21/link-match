@@ -1,7 +1,6 @@
 using System;
 using Links;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Chips
 {
@@ -24,22 +23,16 @@ namespace Chips
             ColorType = iconSO.ColorType;
             IconController.SetIconSO(iconSO);
         }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            //ChipClicked?.Invoke(this);
-        }
         
         private void OnMouseEnter()
         {
             if (!LinkInputController.Instance.IsLinking) return;
-            LinkInputController.Instance.LinkManager.TryAdd(this);
+            LinkInputController.Instance.LinkManager.HandleChipEntered(this);
         }
 
         public void Destroy()
         {
-            // Grid’den de silinmeli, geçici olarak sadece görünmez yapalım
-            gameObject.SetActive(false);
+            ChipClicked?.Invoke(this);
         }
 
         public void Highlight(bool on)
