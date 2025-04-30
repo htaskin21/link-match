@@ -5,27 +5,19 @@ using UnityEngine;
 
 namespace Links
 {
-    public class LinkManager : MonoBehaviour
+    public class LinkManager
     {
-        public static LinkManager Instance { get; private set; }
-
-        private readonly List<LinkableChip> _link = new();
+        private readonly List<LinkableChip> _link;
         private int _minLinkCount = 3;
 
         private GridSystem<Chip> _gridSystem;
-        
-        private void Awake()
-        {
-            Instance = this;
-        }
 
-        public void Init(GridSystem<Chip> gridSystem)
+        public LinkManager(GridSystem<Chip> gridSystem)
         {
+            _link = new();
             _gridSystem = gridSystem;
         }
-
-        public void StartLink() => _link.Clear();
-
+        
         public void StartLinkAt(Vector2 worldPos)
         {
             _link.Clear();
@@ -38,7 +30,7 @@ namespace Links
                 TryAdd(chip);
             }
         }
-        
+
         public void TryAdd(LinkableChip chip)
         {
             if (_link.Contains(chip)) return;
@@ -71,9 +63,9 @@ namespace Links
         private bool IsValidNext(LinkableChip chip)
         {
             var last = _link[^1];
-            bool isAdjacent = Mathf.Abs(chip.Position.x - last.Position.x) + Mathf.Abs(chip.Position.y - last.Position.y) == 1;
+            var isAdjacent = Mathf.Abs(chip.Position.x - last.Position.x) +
+                Mathf.Abs(chip.Position.y - last.Position.y) == 1;
             return isAdjacent && chip.ColorType == last.ColorType;
         }
     }
-
 }

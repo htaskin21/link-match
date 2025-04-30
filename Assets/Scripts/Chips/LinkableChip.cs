@@ -32,8 +32,8 @@ namespace Chips
         
         private void OnMouseEnter()
         {
-            if (!LinkInputController.IsLinking) return;
-            LinkManager.Instance.TryAdd(this);
+            if (!LinkInputController.Instance.IsLinking) return;
+            LinkInputController.Instance.LinkManager.TryAdd(this);
         }
 
         public void Destroy()

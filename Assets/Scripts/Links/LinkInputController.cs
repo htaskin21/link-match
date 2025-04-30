@@ -1,24 +1,32 @@
+using Cores;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace Links
 {
-    public class LinkInputController : MonoBehaviour
+    public class LinkInputController : Singleton<LinkInputController>
     {
-        public static bool IsLinking { get; private set; }
-        
+        private Camera _camera;
+        public LinkManager LinkManager { get; private set; }
+        public bool IsLinking { get; private set; }
+
+        public void Init(Camera mainCamera, LinkManager linkManager)
+        {
+            _camera = mainCamera;
+            LinkManager = linkManager;
+        }
+
         void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
                 IsLinking = true;
-                Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                LinkManager.Instance.StartLinkAt(worldPos); // YENİ
+                Vector2 worldPos = _camera.ScreenToWorldPoint(Input.mousePosition);
+                LinkManager.StartLinkAt(worldPos);
             }
             else if (Input.GetMouseButtonUp(0) && IsLinking)
             {
                 IsLinking = false;
-                LinkManager.Instance.EndLink();
+                LinkManager.EndLink();
             }
         }
     }
