@@ -1,4 +1,5 @@
 using Chips;
+using Links;
 using Logic;
 using Tiles;
 using UnityEngine;
@@ -15,6 +16,9 @@ namespace Managers
 
         [SerializeField]
         private GridManager _gridManager;
+
+        [SerializeField]
+        private LinkManager _linkManager;
 
         [SerializeField]
         private TileManager _tileManager;
@@ -37,6 +41,8 @@ namespace Managers
                 _levelManager.RowSize, _linkableChipPool, chipMatcher,
                 gravityController, boardRefiller);
             _tileManager.CreateTiles(_levelManager.ColumnSize, _levelManager.RowSize, _gridManager.transform.position);
+
+            _linkManager.Init(_gridManager);
 
             _gridManager.PopulateGrid();
         }

@@ -7,6 +7,8 @@ namespace Managers
         [SerializeField]
         private Camera _camera;
 
+        public Camera Camera => _camera;
+
         [SerializeField]
         private float _borderSize;
 

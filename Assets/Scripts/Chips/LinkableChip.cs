@@ -1,9 +1,11 @@
 using System;
+using Links;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Chips
 {
-    public class LinkableChip : Chip, IPointerClickHandler
+    public class LinkableChip : Chip
     {
         public IconController IconController { get; private set; }
 
@@ -25,7 +27,24 @@ namespace Chips
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            ChipClicked?.Invoke(this);
+            //ChipClicked?.Invoke(this);
+        }
+        
+        private void OnMouseEnter()
+        {
+            if (!LinkInputController.IsLinking) return;
+            LinkManager.Instance.TryAdd(this);
+        }
+
+        public void Destroy()
+        {
+            // Grid’den de silinmeli, geçici olarak sadece görünmez yapalım
+            gameObject.SetActive(false);
+        }
+
+        public void Highlight(bool on)
+        {
+            transform.localScale = on ? Vector3.one * 1.2f : Vector3.one;
         }
     }
 }

@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tile
+    uniqueID: 1128918177
+    locked: 0
+  - name: Chip
+    uniqueID: 3685063433
+    locked: 0

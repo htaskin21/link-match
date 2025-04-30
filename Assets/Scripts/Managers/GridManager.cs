@@ -64,6 +64,19 @@ namespace Managers
             }
         }
 
+        public void RemoveChipsFromBoard(List<LinkableChip> linkedChips)
+        {
+            foreach (var chip in linkedChips)
+            {
+                chip.ChipClicked -= CheckMatch;
+                RemoveItemAt(chip.Position);
+                _linkableChipPool.ReturnToPool(chip);
+            }
+
+            _gravityController.ApplyGravity(this, transform.position)
+                .OnComplete(RefillAfterGravity);
+        }
+
         private void RefillAfterGravity()
         {
             _boardRefiller.SpawnNewChips(this, _linkableChipPool, transform.position, CheckMatch)
