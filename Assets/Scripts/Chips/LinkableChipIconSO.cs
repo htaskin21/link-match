@@ -14,5 +14,10 @@ namespace Chips
         private Sprite _icon;
 
         public Sprite Icon => _icon;
+
+        [SerializeField]
+        private Color _color;
+
+        public Color Color => _color;
     }
 }

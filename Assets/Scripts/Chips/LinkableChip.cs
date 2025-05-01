@@ -5,20 +5,20 @@ namespace Chips
 {
     public class LinkableChip : Chip
     {
-        public IconController IconController { get; private set; }
+        private IconController _iconController;
 
         public ChipMovement ChipMovement { get; private set; }
 
         public void Awake()
         {
-            IconController = new IconController(_spriteRenderer);
+            _iconController = new IconController(_spriteRenderer);
             ChipMovement = new ChipMovement();
         }
 
         public void SetType(LinkableChipIconSO iconSO)
         {
             ColorType = iconSO.ColorType;
-            IconController.SetIconSO(iconSO);
+            _iconController.SetIconSO(iconSO);
         }
 
         private void OnMouseEnter()
@@ -30,6 +30,11 @@ namespace Chips
         public void Highlight(bool on)
         {
             transform.localScale = on ? Vector3.one * 1.2f : Vector3.one;
+        }
+
+        public override void Destroy()
+        {
+            _iconController.PlayParticle(transform);
         }
     }
 }

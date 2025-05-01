@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Chips
@@ -20,5 +21,7 @@ namespace Chips
         {
             return gameObject.name;
         }
+
+        public abstract void Destroy();
     }
 }

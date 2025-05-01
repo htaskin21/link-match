@@ -1,6 +1,7 @@
 using Chips;
 using Links;
 using Logic;
+using Particles;
 using Tiles;
 using UnityEngine;
 
@@ -29,6 +30,9 @@ namespace Managers
         [SerializeField]
         private LinkableChipPool _linkableChipPool;
 
+        [SerializeField]
+        private ParticlePool _particlePool;
+
         private void Start()
         {
             _cameraController.Setup(_levelManager.RowSize, _levelManager.ColumnSize);
@@ -49,6 +53,8 @@ namespace Managers
             var linkManager = new LinkManager(_gridManager, _linkVisualController);
             _linkInputController.Init(_cameraController.Camera, linkManager);
 
+           _particlePool.CreatePool(15);
+            
             _gridManager.PopulateGrid();
         }
     }

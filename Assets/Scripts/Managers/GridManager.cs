@@ -52,12 +52,19 @@ namespace Managers
         {
             foreach (var chip in link)
             {
-                RemoveItemAt(chip.Position);
-                _linkableChipPool.ReturnToPool(chip);
+               chip.Destroy();
+               RemoveItemAt(chip.Position);
+               _linkableChipPool.ReturnToPool(chip);
             }
 
             _gravityController.ApplyGravity(this, transform.position)
                 .OnComplete(RefillAfterGravity);
+        }
+
+        private void RemoveChip(LinkableChip chip)
+        {
+            RemoveItemAt(chip.Position);
+            _linkableChipPool.ReturnToPool(chip);
         }
 
         private void RefillAfterGravity()

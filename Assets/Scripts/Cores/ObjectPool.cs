@@ -23,7 +23,7 @@ namespace Cores
             }
         }
 
-        protected T GetObject()
+        public T GetObject()
         {
             return _pooledObjects.Count > 0 ? _pooledObjects.Pop() : CreateObject();
         }
