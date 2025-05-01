@@ -31,7 +31,7 @@ namespace Managers
         private LinkableChipPool _linkableChipPool;
 
         [SerializeField]
-        private ParticlePool _particlePool;
+        private ParticleManager _particleManager;
 
         private void Start()
         {
@@ -53,8 +53,8 @@ namespace Managers
             var linkManager = new LinkManager(_gridManager, _linkVisualController);
             _linkInputController.Init(_cameraController.Camera, linkManager);
 
-           _particlePool.CreatePool(15);
-            
+            _particleManager.Init();
+
             _gridManager.PopulateGrid();
         }
     }
