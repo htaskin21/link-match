@@ -1,4 +1,3 @@
-using System;
 using Chips;
 using Cores;
 using DG.Tweening;
@@ -10,8 +9,7 @@ namespace Logic
     {
         private Sequence _refillSequence;
 
-        public Sequence SpawnNewChips(GridSystem<Chip> grid, LinkableChipPool pool, Vector3 boardOrigin,
-            Action<Chip> onClickCallback)
+        public Sequence SpawnNewChips(GridSystem<Chip> grid, LinkableChipPool pool, Vector3 boardOrigin)
         {
             _refillSequence?.Kill();
             _refillSequence = DOTween.Sequence();
@@ -30,7 +28,6 @@ namespace Logic
                     var chip = pool.GetRandomChip();
                     chip.SetPosition(boardOrigin, x, spawnY);
                     chip.gameObject.SetActive(true);
-                    chip.ChipClicked += onClickCallback;
                     grid.PutItemAt(chip, pos);
 
                     var targetWorldPos = boardOrigin + new Vector3(x, y);

@@ -1,4 +1,3 @@
-using System;
 using Links;
 using UnityEngine;
 
@@ -9,8 +8,6 @@ namespace Chips
         public IconController IconController { get; private set; }
 
         public ChipMovement ChipMovement { get; private set; }
-
-        public event Action<Chip> ChipClicked;
 
         public void Awake()
         {
@@ -23,16 +20,11 @@ namespace Chips
             ColorType = iconSO.ColorType;
             IconController.SetIconSO(iconSO);
         }
-        
+
         private void OnMouseEnter()
         {
             if (!LinkInputController.Instance.IsLinking) return;
             LinkInputController.Instance.LinkManager.HandleChipEntered(this);
-        }
-
-        public void Destroy()
-        {
-            ChipClicked?.Invoke(this);
         }
 
         public void Highlight(bool on)

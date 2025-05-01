@@ -39,7 +39,6 @@ namespace Managers
                     var chip = _linkableChipPool.GetRandomChip();
                     chip.SetPosition(transform.position, x, y);
                     chip.gameObject.SetActive(true);
-                    chip.ChipClicked += CheckMatch;
                     PutItemAt(chip, x, y);
                 }
             }
@@ -51,45 +50,23 @@ namespace Managers
         {
             foreach (var chip in link)
             {
-                RemoveItemAt(chip.Position); // grid’den çıkar
-                _linkableChipPool.ReturnToPool(chip); // havuza geri ver
+                RemoveItemAt(chip.Position); 
+                _linkableChipPool.ReturnToPool(chip);
             }
 
             _gravityController.ApplyGravity(this, transform.position)
                 .OnComplete(RefillAfterGravity);
         }
-        
-        private void CheckMatch(Chip clickedChip)
-        {
-            var group = GetMatchedGroupIfAny(clickedChip.Position);
-            if (group.Count >= 2)
-            {
-                foreach (var chip in group)
-                {
-                    chip.ChipClicked -= CheckMatch;
-                    RemoveItemAt(chip.Position);
-                    _linkableChipPool.ReturnToPool(chip);
-                }
-
-                _gravityController.ApplyGravity(this, transform.position)
-                    .OnComplete(RefillAfterGravity);
-            }
-        }
 
         private void RefillAfterGravity()
         {
-            _boardRefiller.SpawnNewChips(this, _linkableChipPool, transform.position, CheckMatch)
+            _boardRefiller.SpawnNewChips(this, _linkableChipPool, transform.position)
                 .OnComplete(UpdateMatchCache);
         }
 
         private void UpdateMatchCache()
         {
             _matchCache = _chipMatcher.GenerateMatchCache(this);
-        }
-
-        private List<LinkableChip> GetMatchedGroupIfAny(Vector2Int pos)
-        {
-            return _matchCache.TryGetValue(pos, out var group) ? group : new List<LinkableChip>();
         }
 
         private void OnDestroy()
