@@ -37,9 +37,10 @@ namespace Managers
             var chipMatcher = new ChipMatcher();
             var gravityController = new GravityController();
             var boardRefiller = new BoardRefiller();
+            var boardShuffler = new BoardShuffler();
             _gridManager.Init(_levelManager.ColumnSize,
                 _levelManager.RowSize, _linkableChipPool, chipMatcher,
-                gravityController, boardRefiller);
+                gravityController, boardRefiller, boardShuffler);
             _tileManager.CreateTiles(_levelManager.ColumnSize, _levelManager.RowSize, _gridManager.transform.position);
 
             var linkManager = new LinkManager(_gridManager);

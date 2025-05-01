@@ -8,9 +8,9 @@ namespace Links
     public class LinkManager
     {
         private readonly List<LinkableChip> _link;
-        private int _minLinkCount = 3;
+        private const int MinLinkCount = 3;
 
-        private GridManager _gridManager;
+        private readonly GridManager _gridManager;
 
         public LinkManager(GridManager gridManager)
         {
@@ -66,7 +66,7 @@ namespace Links
 
         public void EndLink()
         {
-            if (_link.Count >= _minLinkCount)
+            if (_link.Count >= MinLinkCount)
             {
                 _gridManager.CheckMatch(_link);
             }
