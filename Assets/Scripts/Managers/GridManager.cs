@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Chips;
 using Cores;
 using DG.Tweening;
+using Extensions;
 using Logic;
 using UnityEngine;
 
@@ -50,7 +51,7 @@ namespace Managers
         {
             foreach (var chip in link)
             {
-                RemoveItemAt(chip.Position); 
+                RemoveItemAt(chip.Position);
                 _linkableChipPool.ReturnToPool(chip);
             }
 
@@ -67,12 +68,64 @@ namespace Managers
         private void UpdateMatchCache()
         {
             _matchCache = _chipMatcher.GenerateMatchCache(this);
+
+            if (_matchCache.Count < 1)
+            {
+                do
+                {
+                    var chipPositions = new List<ChipPositionData>();
+                    var chips = new List<Chip>();
+                    for (var y = 0; y < GridSize.y; y++)
+                    {
+                        for (var x = 0; x < GridSize.x; x++)
+                        {
+                            var chip = GetItemAt(x, y);
+                            chips.Add(chip);
+                            chipPositions.Add(new ChipPositionData(chip.transform.position, chip.Position));
+                        }
+                    }
+
+                    chipPositions.Shuffle();
+
+                    for (var y = 0; y < GridSize.y; y++)
+                    {
+                        for (var x = 0; x < GridSize.x; x++)
+                        {
+                            RemoveItemAt(x, y);
+                        }
+                    }
+
+                    for (int i = 0; i < chips.Count; i++)
+                    {
+                        var pos = chipPositions[i];
+                        var chip = chips[i];
+
+                        chips[i].SetPosition(transform.position, pos.Position.x, pos.Position.y);
+                       //chip.transform.position = pos.WorldPosition;
+                        PutItemAt(chips[i], pos.Position.x, pos.Position.y);
+                    }
+                    _matchCache = _chipMatcher.GenerateMatchCache(this);
+                } while (_matchCache.Count < 1);
+            }
         }
+
 
         private void OnDestroy()
         {
             _gravityController.KillActiveTweens();
             _boardRefiller.KillRefillSequence();
+        }
+    }
+
+    public class ChipPositionData
+    {
+        public readonly Vector3 WorldPosition;
+        public readonly Vector2Int Position;
+
+        public ChipPositionData(Vector3 worldPosition, Vector2Int position)
+        {
+            WorldPosition = worldPosition;
+            Position = position;
         }
     }
 }
