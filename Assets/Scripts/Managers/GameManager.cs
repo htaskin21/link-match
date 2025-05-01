@@ -21,6 +21,9 @@ namespace Managers
         private LinkInputController _linkInputController;
 
         [SerializeField]
+        private LinkVisualController _linkVisualController;
+
+        [SerializeField]
         private TileManager _tileManager;
 
         [SerializeField]
@@ -43,7 +46,7 @@ namespace Managers
                 gravityController, boardRefiller, boardShuffler);
             _tileManager.CreateTiles(_levelManager.ColumnSize, _levelManager.RowSize, _gridManager.transform.position);
 
-            var linkManager = new LinkManager(_gridManager);
+            var linkManager = new LinkManager(_gridManager, _linkVisualController);
             _linkInputController.Init(_cameraController.Camera, linkManager);
 
             _gridManager.PopulateGrid();

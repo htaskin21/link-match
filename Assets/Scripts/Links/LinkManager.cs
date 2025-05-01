@@ -5,22 +5,25 @@ using UnityEngine;
 
 namespace Links
 {
-    public class LinkManager
+    public class LinkManager 
     {
         private readonly List<LinkableChip> _link;
         private const int MinLinkCount = 3;
 
         private readonly GridManager _gridManager;
+        private readonly LinkVisualController _linkVisual;
 
-        public LinkManager(GridManager gridManager)
+        public LinkManager(GridManager gridManager, LinkVisualController linkVisual)
         {
-            _link = new List<LinkableChip>();
             _gridManager = gridManager;
+            _linkVisual = linkVisual;
+            _link = new List<LinkableChip>();
         }
 
         public void StartLinkAt(Vector2 worldPos)
         {
             _link.Clear();
+            _linkVisual.ResetLine();
 
             Vector2Int gridPos = Vector2Int.RoundToInt(worldPos);
             if (!_gridManager.CheckBounds(gridPos)) return;
@@ -44,8 +47,10 @@ namespace Links
                 var removed = _link[^1];
                 _link.RemoveAt(_link.Count - 1);
                 removed.Highlight(false);
+                _linkVisual.RemoveLastPoint();
                 return true;
             }
+
             return false;
         }
 
@@ -61,6 +66,7 @@ namespace Links
             {
                 _link.Add(chip);
                 chip.Highlight(true);
+                _linkVisual.AddPoint(chip.transform.position);
             }
         }
 
@@ -77,12 +83,14 @@ namespace Links
             }
 
             _link.Clear();
+            _linkVisual.ResetLine();
         }
 
         private bool IsValidNext(LinkableChip chip)
         {
             var last = _link[^1];
-            bool isAdjacent = Mathf.Abs(chip.Position.x - last.Position.x) + Mathf.Abs(chip.Position.y - last.Position.y) == 1;
+            bool isAdjacent = Mathf.Abs(chip.Position.x - last.Position.x) +
+                Mathf.Abs(chip.Position.y - last.Position.y) == 1;
             return isAdjacent && chip.ColorType == last.ColorType;
         }
     }
