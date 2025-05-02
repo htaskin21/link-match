@@ -40,5 +40,18 @@ namespace Cores
             newObject.gameObject.SetActive(false);
             return newObject;
         }
+
+        public void IncreasePoolSize(int newPoolSize)
+        {
+            if (newPoolSize > _poolSize)
+            {
+                var diff = newPoolSize - _poolSize;
+                for (var i = 0; i < diff; i++)
+                {
+                    var newObject = CreateObject();
+                    _pooledObjects.Push(newObject);
+                }
+            }
+        }
     }
 }

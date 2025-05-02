@@ -22,11 +22,12 @@ namespace UI
 
         private GameRuleManager _gameRuleManager;
 
-        public void Init(GameRuleManager gameRuleManager, Action restartCallBack)
+        public void Init(GameRuleManager gameRuleManager, Action restartCallBack, Action nextLevelCallBack)
         {
             _gameRuleManager = gameRuleManager;
             _gameRuleManager.GameFinished += ShowEndGamePanel;
             _restartButton.onClick.AddListener(restartCallBack.Invoke);
+            _nextLevelButton.onClick.AddListener(nextLevelCallBack.Invoke);
         }
 
         private void ShowEndGamePanel(GameStatus gameStatus)

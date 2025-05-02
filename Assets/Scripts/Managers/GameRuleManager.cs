@@ -47,10 +47,10 @@ namespace Managers
             }
         }
 
-        public void Reset()
+        public void Reset(int moveAmount, int startScore)
         {
-            _remainingMoves = _moveAmount;
-            _currentScore = _startingScore;
+            _remainingMoves = moveAmount;
+            _currentScore = startScore;
             LinkResolved?.Invoke(_remainingMoves, _currentScore);
         }
     }

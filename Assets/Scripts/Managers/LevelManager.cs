@@ -1,35 +1,30 @@
+using System.Collections.Generic;
+using System.Linq;
+using Logic;
 using UnityEngine;
 
 namespace Managers
 {
     public class LevelManager : MonoBehaviour
     {
-        [Header("Board Size")]
         [SerializeField]
-        private int _rowSize;
+        private List<LevelDataSO> _levels;
 
-        public int RowSize => _rowSize;
+        public LevelDataSO GetLevelData(int levelNo)
+        {
+            if (_levels.Count >= levelNo)
+            {
+                Debug.Log("Invalid Level No ");
+                return _levels.First();
+            }
 
-        [SerializeField]
-        private int _columnSize;
+            return _levels[levelNo];
+        }
 
-        public int ColumnSize => _columnSize;
-
-        [Header("Linkable Chip Color Amount")]
-        [SerializeField]
-        private int _numberOfColors;
-
-        public int NumberOfColors => _numberOfColors;
-
-        [Header("Win Conditions")]
-        [SerializeField]
-        private int _moveAmount;
-
-        public int MoveAmount => _moveAmount;
-
-        [SerializeField]
-        private int _reqWinScore;
-
-        public int ReqWinScore => _reqWinScore;
+        public LevelDataSO GetRandomLevel()
+        {
+            var rnd = Random.Range(0, _levels.Count);
+            return _levels[rnd];
+        }
     }
 }

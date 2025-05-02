@@ -19,11 +19,16 @@ namespace Managers
         private BoardShuffler _boardShuffler;
         private Dictionary<Vector2Int, List<LinkableChip>> _matchCache;
 
-        public void Init(int columnSize, int rowSize, LinkableChipPool linkableChipPool, IChipMatcher chipMatcher,
-            GravityController gravityController, BoardRefiller boardRefiller, BoardShuffler boardShuffler)
+        public void Init(int columnSize, int rowSize)
         {
             GridSize = new Vector2Int(columnSize, rowSize);
             CreateGrid();
+        }
+
+        public void Init(int columnSize, int rowSize, LinkableChipPool linkableChipPool, IChipMatcher chipMatcher,
+            GravityController gravityController, BoardRefiller boardRefiller, BoardShuffler boardShuffler)
+        {
+            Init(columnSize, rowSize);
             _linkableChipPool = linkableChipPool;
             _chipMatcher = chipMatcher;
             _gravityController = gravityController;
@@ -52,9 +57,9 @@ namespace Managers
         {
             foreach (var chip in link)
             {
-               chip.Destroy();
-               RemoveItemAt(chip.Position);
-               _linkableChipPool.ReturnToPool(chip);
+                chip.Destroy();
+                RemoveItemAt(chip.Position);
+                _linkableChipPool.ReturnToPool(chip);
             }
 
             _gravityController.ApplyGravity(this, transform.position)
@@ -86,6 +91,19 @@ namespace Managers
         public void Shuffle()
         {
             _matchCache = _boardShuffler.ShuffleUntilMatch(this, _chipMatcher, transform);
+        }
+        
+        public void RemoveAllChips()
+        {
+            for (var y = 0; y < GridSize.y; y++)
+            {
+                for (var x = 0; x < GridSize.x; x++)
+                {
+                    if (IsEmpty(x, y)) continue;
+                    var chip = (LinkableChip)GetItemAt(x, y);
+                    _linkableChipPool.ReturnToPool(chip);
+                }
+            }
         }
 
         private void OnDestroy()

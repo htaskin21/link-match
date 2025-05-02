@@ -1,4 +1,5 @@
 using System;
+using Logic;
 using UI;
 using UnityEngine;
 
@@ -14,10 +15,10 @@ namespace Managers
 
         public EndGameCanvas EndGameCanvas => _endGameCanvas;
 
-        public void Init(LevelManager levelManager, GameRuleManager gameRuleManager, Action restartCallBack)
+        public void Init(LevelDataSO levelData, GameRuleManager gameRuleManager, Action restartCallBack,Action nextLevelCallBack)
         {
-            _upperBarCanvas.Init(levelManager.MoveAmount, levelManager.ReqWinScore, gameRuleManager);
-            _endGameCanvas.Init(gameRuleManager, restartCallBack);
+            _upperBarCanvas.Init(levelData.MoveAmount, levelData.ReqWinScore, gameRuleManager);
+            _endGameCanvas.Init(gameRuleManager, restartCallBack,nextLevelCallBack);
         }
     }
 }
