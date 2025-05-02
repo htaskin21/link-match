@@ -33,6 +33,9 @@ namespace Managers
         [SerializeField]
         private ParticleManager _particleManager;
 
+        [SerializeField]
+        private UIManager _uiManager;
+
         private void Start()
         {
             _cameraController.Setup(_levelManager.RowSize, _levelManager.ColumnSize);
@@ -52,10 +55,12 @@ namespace Managers
 
             var gameRuleManager = new GameRuleManager(_levelManager.MoveAmount, _levelManager.ReqWinScore);
 
-            var linkManager = new LinkManager(_gridManager, _linkVisualController,gameRuleManager);
+            var linkManager = new LinkManager(_gridManager, _linkVisualController, gameRuleManager);
             _linkInputController.Init(_cameraController.Camera, linkManager);
 
             _particleManager.Init();
+
+            _uiManager.Init(_levelManager, gameRuleManager);
 
             _gridManager.PopulateGrid();
         }

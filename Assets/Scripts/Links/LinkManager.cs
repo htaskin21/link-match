@@ -77,14 +77,6 @@ namespace Links
             {
                 _gridManager.CheckMatch(_link);
                 _gameRuleManager.ResolveLink(_link.Count);
-
-                if (_gameRuleManager.IsGameOver)
-                {
-                    if (_gameRuleManager.HasWon)
-                        Debug.Log("Oyuncu kazandı!");
-                    else
-                        Debug.Log("Oyuncu kaybetti!");
-                }
             }
 
             foreach (var chip in _link)

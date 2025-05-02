@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Managers
@@ -6,18 +7,17 @@ namespace Managers
     {
         private int _remainingMoves;
         private int _currentScore;
-        private int _requiredScore;
 
-        public bool IsGameOver => _remainingMoves <= 0 || _currentScore >= _requiredScore;
-        public bool HasWon => _currentScore >= _requiredScore;
-        public int CurrentScore => _currentScore;
-        public int RemainingMoves => _remainingMoves;
-        
+        private bool IsGameOver => _remainingMoves <= 0 || _currentScore <= 0;
+        private bool HasWon => _currentScore <= 0;
+
+        public event Action<int, int> LinkResolved;
+        public event Action<GameStatus> GameFinished;
+
         public GameRuleManager(int moveAmount, int requiredScore)
         {
             _remainingMoves = moveAmount;
-            _requiredScore = requiredScore;
-            _currentScore = 0;
+            _currentScore = requiredScore;
         }
 
         public void ResolveLink(int chipCount)
@@ -26,9 +26,19 @@ namespace Managers
                 return;
 
             _remainingMoves--;
-            _currentScore += chipCount * 10;
+            _currentScore -= chipCount * 10;
+            LinkResolved?.Invoke(_remainingMoves, _currentScore);
 
-            Debug.Log($"Move Used. Remaining: {_remainingMoves}, Score: {_currentScore}/{_requiredScore}");
+            CheckGameStatus();
+        }
+
+        private void CheckGameStatus()
+        {
+            if (IsGameOver)
+            {
+                GameFinished?.Invoke(HasWon ? GameStatus.Win : GameStatus.Lose);
+                Debug.Log(HasWon ? GameStatus.Win : GameStatus.Lose);
+            }
         }
     }
 }
