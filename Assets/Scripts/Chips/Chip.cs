@@ -16,6 +16,11 @@ namespace Chips
             Position = new Vector2Int(x, y);
         }
 
+        public void SetSortOrder(int yValue = 0)
+        {
+            _spriteRenderer.sortingOrder = yValue;
+        }
+
         public override string ToString()
         {
             return gameObject.name;

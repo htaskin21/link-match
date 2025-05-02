@@ -31,6 +31,7 @@ namespace Logic
                     grid.PutItemAt(chip, pos);
 
                     var targetWorldPos = boardOrigin + new Vector3(x, y);
+                    chip.SetSortOrder(y);
                     _refillSequence.Join(chip.ChipMovement.Move(chip.gameObject, targetWorldPos)
                         .OnComplete(() => chip.SetPosition(boardOrigin, pos.x, pos.y)));
 

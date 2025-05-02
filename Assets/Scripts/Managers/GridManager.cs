@@ -10,106 +10,137 @@ namespace Managers
     public class GridManager : GridSystem<Chip>
     {
         [SerializeField]
-        private Vector2 _offScreenOffSet;
+        private Vector2 _offScreenOffset;
 
-        private LinkableChipPool _linkableChipPool;
-        private IChipMatcher _chipMatcher;
-        private GravityController _gravityController;
-        private BoardRefiller _boardRefiller;
-        private BoardShuffler _boardShuffler;
+        // Dependencies
+        private LinkableChipPool _chipPool;
+        private IChipMatcher _matcher;
+        private GravityController _gravity;
+        private BoardRefiller _refiller;
+        private BoardShuffler _shuffler;
+
+        // Match cache
         private Dictionary<Vector2Int, List<LinkableChip>> _matchCache;
-
-        public void Init(int columnSize, int rowSize)
+        
+        public void Init(
+            int columns,
+            int rows,
+            LinkableChipPool chipPool,
+            IChipMatcher matcher,
+            GravityController gravity,
+            BoardRefiller refiller,
+            BoardShuffler shuffler)
         {
-            GridSize = new Vector2Int(columnSize, rowSize);
-            CreateGrid();
-        }
+            _chipPool = chipPool;
+            _matcher = matcher;
+            _gravity = gravity;
+            _refiller = refiller;
+            _shuffler = shuffler;
 
-        public void Init(int columnSize, int rowSize, LinkableChipPool linkableChipPool, IChipMatcher chipMatcher,
-            GravityController gravityController, BoardRefiller boardRefiller, BoardShuffler boardShuffler)
-        {
-            Init(columnSize, rowSize);
-            _linkableChipPool = linkableChipPool;
-            _chipMatcher = chipMatcher;
-            _gravityController = gravityController;
-            _boardRefiller = boardRefiller;
-            _boardShuffler = boardShuffler;
+            ResizeGrid(columns, rows);
         }
-
+        
         public void PopulateGrid()
         {
-            for (var y = 0; y < GridSize.y; y++)
-            {
-                for (var x = 0; x < GridSize.x; x++)
-                {
-                    if (!IsEmpty(x, y)) continue;
-                    var chip = _linkableChipPool.GetRandomChip();
-                    chip.SetPosition(transform.position, x, y);
-                    chip.gameObject.SetActive(true);
-                    PutItemAt(chip, x, y);
-                }
-            }
-
-            UpdateMatchCache();
+            FillEmptyCells();
+            EnsureMatch();
         }
 
-        public void CheckMatch(List<LinkableChip> link)
+        private void FillEmptyCells()
+        {
+            foreach (var pos in AllPositions())
+            {
+                if (IsEmpty(pos))
+                {
+                    var chip = _chipPool.GetRandomChip();
+                    chip.SetPosition(transform.position, pos.x, pos.y);
+                    chip.SetSortOrder(pos.y);
+                    chip.gameObject.SetActive(true);
+                    PutItemAt(chip, pos);
+                }
+            }
+        }
+
+        private void EnsureMatch()
+        {
+            _matchCache = _matcher.GenerateMatchCache(this);
+            if (_matchCache.Count == 0)
+                ShuffleUntilMatch();
+        }
+        
+        public void ShuffleUntilMatch(int maxAttempts = 50)
+        {
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                _matchCache = _shuffler.ShuffleUntilMatch(this, _matcher, transform);
+                if (_matchCache.Count > 0)
+                    return;
+            }
+
+            Debug.LogWarning("GridManager: Shuffle limit reached without finding a match.");
+        }
+        
+        public void CheckMatchAndRefill(List<LinkableChip> link)
+        {
+            RemoveLinkedChips(link);
+            ApplyGravityAndRefill();
+        }
+
+        private void RemoveLinkedChips(IEnumerable<LinkableChip> link)
         {
             foreach (var chip in link)
             {
                 chip.Destroy();
                 RemoveItemAt(chip.Position);
-                _linkableChipPool.ReturnToPool(chip);
+                _chipPool.ReturnToPool(chip);
             }
-
-            _gravityController.ApplyGravity(this, transform.position)
-                .OnComplete(RefillAfterGravity);
         }
 
-        private void RemoveChip(LinkableChip chip)
+        private void ApplyGravityAndRefill()
         {
-            RemoveItemAt(chip.Position);
-            _linkableChipPool.ReturnToPool(chip);
+            _gravity.ApplyGravity(this, transform.position)
+                .OnComplete(RefillAfterGravity);
         }
 
         private void RefillAfterGravity()
         {
-            _boardRefiller.SpawnNewChips(this, _linkableChipPool, transform.position)
-                .OnComplete(UpdateMatchCache);
+            _refiller.SpawnNewChips(this, _chipPool, transform.position)
+                .OnComplete(PopulateGrid);
         }
-
-        private void UpdateMatchCache()
+        
+        public void ClearGrid()
         {
-            _matchCache = _chipMatcher.GenerateMatchCache(this);
-
-            if (_matchCache.Count == 0)
+            foreach (var pos in AllPositions())
             {
-                Shuffle();
+                if (!IsEmpty(pos) && GetItemAt(pos) is LinkableChip chip)
+                {
+                    RemoveItemAt(pos);
+                    _chipPool.ReturnToPool(chip);
+                }
             }
         }
 
-        public void Shuffle()
+        public void ResizeGrid(int columns, int rows)
         {
-            _matchCache = _boardShuffler.ShuffleUntilMatch(this, _chipMatcher, transform);
+            GridSize = new Vector2Int(columns, rows);
+            CreateGrid();
         }
-        
-        public void RemoveAllChips()
+
+        private IEnumerable<Vector2Int> AllPositions()
         {
             for (var y = 0; y < GridSize.y; y++)
             {
                 for (var x = 0; x < GridSize.x; x++)
                 {
-                    if (IsEmpty(x, y)) continue;
-                    var chip = (LinkableChip)GetItemAt(x, y);
-                    _linkableChipPool.ReturnToPool(chip);
+                    yield return new Vector2Int(x, y);
                 }
             }
         }
 
         private void OnDestroy()
         {
-            _gravityController.KillActiveTweens();
-            _boardRefiller.KillRefillSequence();
+            _gravity.KillActiveTweens();
+            _refiller.KillRefillSequence();
         }
     }
 }

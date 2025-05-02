@@ -9,14 +9,20 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
+        [Header("Level")]
         [SerializeField]
         private LevelManager _levelManager;
 
-        [SerializeField]
-        private CameraController _cameraController;
-
+        [Header("Tile & Grid")]
         [SerializeField]
         private GridManager _gridManager;
+
+        [SerializeField]
+        private TilePool _tilePool;
+
+        [Header("Chips & Links")]
+        [SerializeField]
+        private LinkableChipPool _linkableChipPool;
 
         [SerializeField]
         private LinkInputController _linkInputController;
@@ -24,76 +30,77 @@ namespace Managers
         [SerializeField]
         private LinkVisualController _linkVisualController;
 
-        [SerializeField]
-        private TileManager _tileManager;
-
-        [SerializeField]
-        private LinkableChipPool _linkableChipPool;
-
-        [SerializeField]
-        private ParticleManager _particleManager;
-
+        [Header("UI")]
         [SerializeField]
         private UIManager _uiManager;
 
-        private LevelDataSO _currentLevel;
+        [Header("Effects & Particles")]
+        [SerializeField]
+        private ParticleManager _particleManager;
+
+        [Header("Grid")]
+        [SerializeField]
+        private CameraController _cameraController;
+
+        // Runtime 
+        public LevelDataSO CurrentLevel { get; private set; }
         private GameRuleManager _gameRuleManager;
+        private IChipMatcher _chipMatcher;
+        private BoardShuffler _boardShuffler;
+        private GameStateManager _gameStateManager;
 
         private void Start()
         {
-            _currentLevel = _levelManager.GetLevelData(0);
-            _cameraController.Setup(_currentLevel.RowSize, _currentLevel.ColumnSize);
+            CurrentLevel = _levelManager.GetLevelData(0);
+            _cameraController.Setup(CurrentLevel.RowSize, CurrentLevel.ColumnSize);
+            CreatePools();
+            InitializeBoard();
+            InitializeTile();
+            InitializeLinkLogic();
+            _gameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
+                _cameraController, _linkableChipPool, _tilePool);
+            _uiManager.Init(CurrentLevel, _gameRuleManager, _gameStateManager);
+            _gridManager.PopulateGrid();
+        }
 
-            _linkableChipPool.Init(_currentLevel.NumberOfColors);
-            var poolSize = _currentLevel.ColumnSize * _currentLevel.RowSize * 2;
+        private void CreatePools()
+        {
+            _linkableChipPool.Init(CurrentLevel.NumberOfColors);
+            var poolSize = CurrentLevel.ColumnSize * CurrentLevel.RowSize * 2;
             _linkableChipPool.CreatePool(poolSize);
 
+            _particleManager.Init();
+        }
+
+        private void InitializeBoard()
+        {
             var chipMatcher = new ChipMatcher();
             var gravityController = new GravityController();
             var boardRefiller = new BoardRefiller();
             var boardShuffler = new BoardShuffler();
-            _gridManager.Init(_currentLevel.ColumnSize,
-                _currentLevel.RowSize, _linkableChipPool, chipMatcher,
+            _gridManager.Init(CurrentLevel.ColumnSize,
+                CurrentLevel.RowSize, _linkableChipPool, chipMatcher,
                 gravityController, boardRefiller, boardShuffler);
-            _tileManager.CreateTiles(_currentLevel.ColumnSize, _currentLevel.RowSize, _gridManager.transform.position);
+        }
 
-            _gameRuleManager = new GameRuleManager(_currentLevel.MoveAmount, _currentLevel.ReqWinScore);
+        private void InitializeTile()
+        {
+            var poolSize = CurrentLevel.ColumnSize * CurrentLevel.RowSize;
+            _tilePool.CreatePool(poolSize);
+            _tilePool.CreateTiles(CurrentLevel.ColumnSize,
+                CurrentLevel.RowSize, _gridManager.transform.position);
+        }
 
+        private void InitializeLinkLogic()
+        {
+            _gameRuleManager = new GameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
             var linkManager = new LinkManager(_gridManager, _linkVisualController, _gameRuleManager);
             _linkInputController.Init(_cameraController.Camera, linkManager);
-
-            _particleManager.Init();
-
-            _uiManager.Init(_currentLevel, _gameRuleManager, RestartGame, PlayNextLevel);
-
-            _gridManager.PopulateGrid();
         }
 
-        private void RestartGame()
+        public void SetRandomLevel()
         {
-            _gameRuleManager.Reset(_currentLevel.MoveAmount, _currentLevel.ReqWinScore);
-            _gridManager.Shuffle();
-            _uiManager.EndGameCanvas.ToggleCanvas(false);
-        }
-
-        private void PlayNextLevel()
-        {
-            _currentLevel = _levelManager.GetRandomLevel();
-            _cameraController.Setup(_currentLevel.RowSize, _currentLevel.ColumnSize);
-            _gridManager.RemoveAllChips();
-           
-            _linkableChipPool.Init(_currentLevel.NumberOfColors);
-            var poolSize = _currentLevel.ColumnSize * _currentLevel.RowSize * 2;
-            _linkableChipPool.IncreasePoolSize(poolSize);
-
-            _gridManager.Init(_currentLevel.ColumnSize,
-                _currentLevel.RowSize);
-
-            _tileManager.CreateTiles(_currentLevel.ColumnSize, _currentLevel.RowSize, _gridManager.transform.position);
-
-            _gameRuleManager.Reset(_currentLevel.MoveAmount, _currentLevel.ReqWinScore);
-            _gridManager.PopulateGrid();
-            _uiManager.EndGameCanvas.ToggleCanvas(false);
+            CurrentLevel = _levelManager.GetRandomLevel();
         }
     }
 }

@@ -18,11 +18,19 @@ namespace Chips
         public Tween Move(GameObject chip, Vector3 targetPos)
         {
             _activeTween?.Kill();
-
+            var speed = FindSpeed(chip, targetPos);
             _activeTween = chip.transform.DOMove(targetPos, _speed)
                 .SetEase(_easeType);
 
             return _activeTween;
+        }
+
+        private float FindSpeed(GameObject chip, Vector3 targetPos)
+        {
+            var startPos = chip.transform.position;
+            var distance = Vector3.Distance(startPos, targetPos);
+            var duration = distance / _speed;
+            return duration;
         }
     }
 }

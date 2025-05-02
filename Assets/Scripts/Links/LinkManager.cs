@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Links
 {
-    public class LinkManager 
+    public class LinkManager
     {
         private readonly List<LinkableChip> _link;
         private const int MinLinkCount = 3;
@@ -14,7 +14,7 @@ namespace Links
         private readonly LinkVisualController _linkVisual;
         private readonly GameRuleManager _gameRuleManager;
 
-        public LinkManager(GridManager gridManager, LinkVisualController linkVisual,GameRuleManager gameRuleManager)
+        public LinkManager(GridManager gridManager, LinkVisualController linkVisual, GameRuleManager gameRuleManager)
         {
             _gridManager = gridManager;
             _linkVisual = linkVisual;
@@ -52,6 +52,7 @@ namespace Links
                 _linkVisual.RemoveLastPoint();
                 return true;
             }
+
             return false;
         }
 
@@ -75,7 +76,7 @@ namespace Links
         {
             if (_link.Count >= MinLinkCount)
             {
-                _gridManager.CheckMatch(_link);
+                _gridManager.CheckMatchAndRefill(_link);
                 _gameRuleManager.ResolveLink(_link.Count);
             }
 

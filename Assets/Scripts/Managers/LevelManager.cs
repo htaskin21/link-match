@@ -12,7 +12,7 @@ namespace Managers
 
         public LevelDataSO GetLevelData(int levelNo)
         {
-            if (_levels.Count >= levelNo)
+            if (levelNo >= _levels.Count)
             {
                 Debug.Log("Invalid Level No ");
                 return _levels.First();

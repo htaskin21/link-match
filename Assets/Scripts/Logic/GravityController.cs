@@ -36,7 +36,7 @@ namespace Logic
                             continue;
 
                         grid.MoveItemTo(currentPos, targetPos);
-
+                        chip.SetSortOrder(targetPos.y);
                         var worldTarget = boardOrigin + new Vector3(targetPos.x, targetPos.y);
                         var moveTween = chip.ChipMovement.Move(chip.gameObject, worldTarget)
                             .OnComplete(() => chip.SetPosition(boardOrigin, targetPos.x, targetPos.y));

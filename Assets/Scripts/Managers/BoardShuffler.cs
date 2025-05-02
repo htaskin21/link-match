@@ -79,6 +79,7 @@ namespace Managers
 
                 chip.SetPosition(gridTransform.position, gridPos.x, gridPos.y);
                 chip.transform.position = world;
+                chip.SetSortOrder(gridPos.y);
                 grid.PutItemAt(chip, new Vector2Int(gridPos.x, gridPos.y));
             }
         }
