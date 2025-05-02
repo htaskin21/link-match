@@ -1282,6 +1282,8 @@ MonoBehaviour:
   _rowSize: 8
   _columnSize: 8
   _numberOfColors: 4
+  _moveAmount: 3
+  _reqWinScore: 90
 --- !u!1 &1234268549
 GameObject:
   m_ObjectHideFlags: 0

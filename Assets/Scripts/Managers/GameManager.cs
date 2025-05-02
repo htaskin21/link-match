@@ -50,7 +50,9 @@ namespace Managers
                 gravityController, boardRefiller, boardShuffler);
             _tileManager.CreateTiles(_levelManager.ColumnSize, _levelManager.RowSize, _gridManager.transform.position);
 
-            var linkManager = new LinkManager(_gridManager, _linkVisualController);
+            var gameRuleManager = new GameRuleManager(_levelManager.MoveAmount, _levelManager.ReqWinScore);
+
+            var linkManager = new LinkManager(_gridManager, _linkVisualController,gameRuleManager);
             _linkInputController.Init(_cameraController.Camera, linkManager);
 
             _particleManager.Init();

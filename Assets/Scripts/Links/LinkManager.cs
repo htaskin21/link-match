@@ -12,11 +12,13 @@ namespace Links
 
         private readonly GridManager _gridManager;
         private readonly LinkVisualController _linkVisual;
+        private readonly GameRuleManager _gameRuleManager;
 
-        public LinkManager(GridManager gridManager, LinkVisualController linkVisual)
+        public LinkManager(GridManager gridManager, LinkVisualController linkVisual,GameRuleManager gameRuleManager)
         {
             _gridManager = gridManager;
             _linkVisual = linkVisual;
+            _gameRuleManager = gameRuleManager;
             _link = new List<LinkableChip>();
         }
 
@@ -50,7 +52,6 @@ namespace Links
                 _linkVisual.RemoveLastPoint();
                 return true;
             }
-
             return false;
         }
 
@@ -75,6 +76,15 @@ namespace Links
             if (_link.Count >= MinLinkCount)
             {
                 _gridManager.CheckMatch(_link);
+                _gameRuleManager.ResolveLink(_link.Count);
+
+                if (_gameRuleManager.IsGameOver)
+                {
+                    if (_gameRuleManager.HasWon)
+                        Debug.Log("Oyuncu kazandı!");
+                    else
+                        Debug.Log("Oyuncu kaybetti!");
+                }
             }
 
             foreach (var chip in _link)

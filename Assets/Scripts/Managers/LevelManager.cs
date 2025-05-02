@@ -20,5 +20,16 @@ namespace Managers
         private int _numberOfColors;
 
         public int NumberOfColors => _numberOfColors;
+
+        [Header("Win Conditions")]
+        [SerializeField]
+        private int _moveAmount;
+
+        public int MoveAmount => _moveAmount;
+
+        [SerializeField]
+        private int _reqWinScore;
+
+        public int ReqWinScore => _reqWinScore;
     }
 }
