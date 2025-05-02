@@ -36,6 +36,8 @@ namespace Managers
         [SerializeField]
         private UIManager _uiManager;
 
+        private GameRuleManager _gameRuleManager;
+
         private void Start()
         {
             _cameraController.Setup(_levelManager.RowSize, _levelManager.ColumnSize);
@@ -53,16 +55,23 @@ namespace Managers
                 gravityController, boardRefiller, boardShuffler);
             _tileManager.CreateTiles(_levelManager.ColumnSize, _levelManager.RowSize, _gridManager.transform.position);
 
-            var gameRuleManager = new GameRuleManager(_levelManager.MoveAmount, _levelManager.ReqWinScore);
+            _gameRuleManager = new GameRuleManager(_levelManager.MoveAmount, _levelManager.ReqWinScore);
 
-            var linkManager = new LinkManager(_gridManager, _linkVisualController, gameRuleManager);
+            var linkManager = new LinkManager(_gridManager, _linkVisualController, _gameRuleManager);
             _linkInputController.Init(_cameraController.Camera, linkManager);
 
             _particleManager.Init();
 
-            _uiManager.Init(_levelManager, gameRuleManager);
+            _uiManager.Init(_levelManager, _gameRuleManager, RestartGame);
 
             _gridManager.PopulateGrid();
+        }
+
+        private void RestartGame()
+        {
+            _gameRuleManager.Reset();
+            _gridManager.Shuffle();
+            _uiManager.EndGameCanvas.ToggleCanvas(false);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UI;
 using UnityEngine;
 
@@ -11,10 +12,12 @@ namespace Managers
         [SerializeField]
         private EndGameCanvas _endGameCanvas;
 
-        public void Init(LevelManager levelManager, GameRuleManager gameRuleManager)
+        public EndGameCanvas EndGameCanvas => _endGameCanvas;
+
+        public void Init(LevelManager levelManager, GameRuleManager gameRuleManager, Action restartCallBack)
         {
             _upperBarCanvas.Init(levelManager.MoveAmount, levelManager.ReqWinScore, gameRuleManager);
-            _endGameCanvas.Init(gameRuleManager);
+            _endGameCanvas.Init(gameRuleManager, restartCallBack);
         }
     }
 }

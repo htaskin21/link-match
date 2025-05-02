@@ -79,8 +79,13 @@ namespace Managers
 
             if (_matchCache.Count == 0)
             {
-                _matchCache = _boardShuffler.ShuffleUntilMatch(this, _chipMatcher, transform);
+                Shuffle();
             }
+        }
+
+        public void Shuffle()
+        {
+            _matchCache = _boardShuffler.ShuffleUntilMatch(this, _chipMatcher, transform);
         }
 
         private void OnDestroy()

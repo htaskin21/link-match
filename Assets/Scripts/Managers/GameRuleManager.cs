@@ -5,6 +5,9 @@ namespace Managers
 {
     public class GameRuleManager
     {
+        private readonly int _moveAmount;
+        private readonly int _startingScore;
+
         private int _remainingMoves;
         private int _currentScore;
 
@@ -14,10 +17,13 @@ namespace Managers
         public event Action<int, int> LinkResolved;
         public event Action<GameStatus> GameFinished;
 
-        public GameRuleManager(int moveAmount, int requiredScore)
+        public GameRuleManager(int moveAmount, int startScore)
         {
-            _remainingMoves = moveAmount;
-            _currentScore = requiredScore;
+            _moveAmount = moveAmount;
+            _startingScore = startScore;
+            
+            _remainingMoves = _moveAmount;
+            _currentScore = _startingScore;
         }
 
         public void ResolveLink(int chipCount)
@@ -39,6 +45,13 @@ namespace Managers
                 GameFinished?.Invoke(HasWon ? GameStatus.Win : GameStatus.Lose);
                 Debug.Log(HasWon ? GameStatus.Win : GameStatus.Lose);
             }
+        }
+
+        public void Reset()
+        {
+            _remainingMoves = _moveAmount;
+            _currentScore = _startingScore;
+            LinkResolved?.Invoke(_remainingMoves, _currentScore);
         }
     }
 }

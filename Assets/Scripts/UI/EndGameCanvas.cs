@@ -22,10 +22,11 @@ namespace UI
 
         private GameRuleManager _gameRuleManager;
 
-        public void Init(GameRuleManager gameRuleManager)
+        public void Init(GameRuleManager gameRuleManager, Action restartCallBack)
         {
             _gameRuleManager = gameRuleManager;
             _gameRuleManager.GameFinished += ShowEndGamePanel;
+            _restartButton.onClick.AddListener(restartCallBack.Invoke);
         }
 
         private void ShowEndGamePanel(GameStatus gameStatus)
@@ -61,6 +62,11 @@ namespace UI
             _headerText.text = "LOSE";
             _restartButton.gameObject.SetActive(true);
             _nextLevelButton.gameObject.SetActive(false);
+        }
+
+        public void ToggleCanvas(bool state)
+        {
+            _canvas.gameObject.SetActive(state);
         }
 
         private void OnDestroy()
