@@ -96,5 +96,16 @@ namespace Links
                 Mathf.Abs(chip.Position.y - last.Position.y) == 1;
             return isAdjacent && chip.ColorType == last.ColorType;
         }
+        
+        public void TryContinueAt(Vector2 worldPos)
+        {
+            Vector2Int gridPos = Vector2Int.RoundToInt(worldPos);
+            if (!_gridManager.CheckBounds(gridPos)) return;
+
+            if (_gridManager.GetItemAt(gridPos) is LinkableChip chip)
+            {
+                HandleChipEntered(chip);
+            }
+        }
     }
 }
