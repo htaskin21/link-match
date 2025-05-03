@@ -21,7 +21,7 @@ namespace Managers
 
         // Match cache
         private Dictionary<Vector2Int, List<LinkableChip>> _matchCache;
-        
+
         public void Init(
             int columns,
             int rows,
@@ -39,7 +39,7 @@ namespace Managers
 
             ResizeGrid(columns, rows);
         }
-        
+
         public void PopulateGrid()
         {
             FillEmptyCells();
@@ -67,7 +67,7 @@ namespace Managers
             if (_matchCache.Count == 0)
                 ShuffleUntilMatch();
         }
-        
+
         public void ShuffleUntilMatch(int maxAttempts = 50)
         {
             for (var attempt = 1; attempt <= maxAttempts; attempt++)
@@ -79,7 +79,7 @@ namespace Managers
 
             Debug.LogWarning("GridManager: Shuffle limit reached without finding a match.");
         }
-        
+
         public void CheckMatchAndRefill(List<LinkableChip> link)
         {
             RemoveLinkedChips(link);
@@ -105,9 +105,9 @@ namespace Managers
         private void RefillAfterGravity()
         {
             _refiller.SpawnNewChips(this, _chipPool, transform.position)
-                .OnComplete(PopulateGrid);
+                .OnComplete(EnsureMatch);
         }
-        
+
         public void ClearGrid()
         {
             foreach (var pos in AllPositions())
@@ -124,17 +124,6 @@ namespace Managers
         {
             GridSize = new Vector2Int(columns, rows);
             CreateGrid();
-        }
-
-        private IEnumerable<Vector2Int> AllPositions()
-        {
-            for (var y = 0; y < GridSize.y; y++)
-            {
-                for (var x = 0; x < GridSize.x; x++)
-                {
-                    yield return new Vector2Int(x, y);
-                }
-            }
         }
 
         private void OnDestroy()

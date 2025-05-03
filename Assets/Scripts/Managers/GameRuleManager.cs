@@ -1,13 +1,9 @@
 using System;
-using UnityEngine;
 
 namespace Managers
 {
     public class GameRuleManager
     {
-        private readonly int _moveAmount;
-        private readonly int _startingScore;
-
         private int _remainingMoves;
         private int _currentScore;
 
@@ -19,11 +15,8 @@ namespace Managers
 
         public GameRuleManager(int moveAmount, int startScore)
         {
-            _moveAmount = moveAmount;
-            _startingScore = startScore;
-            
-            _remainingMoves = _moveAmount;
-            _currentScore = _startingScore;
+            _remainingMoves = moveAmount;
+            _currentScore = startScore;
         }
 
         public void ResolveLink(int chipCount)
@@ -43,7 +36,6 @@ namespace Managers
             if (IsGameOver)
             {
                 GameFinished?.Invoke(HasWon ? GameStatus.Win : GameStatus.Lose);
-                Debug.Log(HasWon ? GameStatus.Win : GameStatus.Lose);
             }
         }
 

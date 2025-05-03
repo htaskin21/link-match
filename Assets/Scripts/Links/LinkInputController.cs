@@ -16,7 +16,7 @@ namespace Links
             LinkManager = linkManager;
         }
 
-        void Update()
+        private void Update()
         {
             if (Input.touchCount > 0)
             {
@@ -46,22 +46,6 @@ namespace Links
                     if (touch.fingerId == _activeFingerId)
                         EndLink();
                     break;
-            }
-        }
-
-        private void HandleMouse()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                BeginLink(Input.mousePosition);
-            }
-            else if (Input.GetMouseButton(0) && IsLinking)
-            {
-                ContinueLink(Input.mousePosition);
-            }
-            else if (Input.GetMouseButtonUp(0) && IsLinking)
-            {
-                EndLink();
             }
         }
 
