@@ -18,7 +18,7 @@ namespace Logic
             {
                 var spawnOffset = 0;
 
-                for (var y = grid.GridSize.y - 1; y >= 0; y--)
+                for (var y = 0; y < grid.GridSize.y; y++)
                 {
                     Vector2Int pos = new(x, y);
                     if (!grid.IsEmpty(pos))
@@ -30,10 +30,12 @@ namespace Logic
                     chip.gameObject.SetActive(true);
                     grid.PutItemAt(chip, pos);
 
-                    var targetWorldPos = boardOrigin + new Vector3(x, y);
+                    var targetWorldPos = boardOrigin + new Vector3(x, y, 0);
                     chip.SetSortOrder(y);
-                    _refillSequence.Join(chip.ChipMovement.Move(chip.gameObject, targetWorldPos)
-                        .OnComplete(() => chip.SetPosition(boardOrigin, pos.x, pos.y)));
+                    _refillSequence.Join(
+                        chip.ChipMovement.Move(chip.gameObject, targetWorldPos)
+                            .OnComplete(() => chip.SetPosition(boardOrigin, pos.x, pos.y))
+                    );
 
                     spawnOffset++;
                 }
