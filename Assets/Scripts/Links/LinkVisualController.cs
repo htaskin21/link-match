@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Links
 {
     [RequireComponent(typeof(LineRenderer))]
+    // Manages the LineRenderer to display the link path between chips.
     public class LinkVisualController : MonoBehaviour
     {
         [SerializeField]
@@ -30,6 +31,9 @@ namespace Links
             _lineRenderer.SetPosition(_positions.Count - 1, worldPosition);
         }
 
+        /// <summary>
+        /// Removes the last drawn point and updates the line renderer.
+        /// </summary>
         public void RemoveLastPoint()
         {
             if (_positions.Count == 0) return;

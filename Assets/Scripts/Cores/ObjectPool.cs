@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Cores
 {
+    // Generic object pool for MonoBehaviour-derived types
     public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
         [SerializeField]
@@ -41,6 +42,9 @@ namespace Cores
             return newObject;
         }
 
+        /// <summary>
+        /// Expands the pool by instantiating additional objects if needed.
+        /// </summary>
         public void IncreasePoolSize(int newPoolSize)
         {
             if (newPoolSize > _poolSize)
