@@ -4,6 +4,9 @@ namespace Managers
 {
     public class GameRuleManager
     {
+        private EndGameManager _endGameManager;
+        private GameStateManager _gameStateManager;
+        
         private int _remainingMoves;
         private int _currentScore;
 
@@ -11,7 +14,7 @@ namespace Managers
         private bool HasWon => _currentScore <= 0;
 
         public event Action<int, int> LinkResolved;
-        public event Action<GameStatus> GameFinished;
+        public event Action<GameState> GameFinished;
 
         public GameRuleManager(int moveAmount, int startScore)
         {
@@ -35,7 +38,7 @@ namespace Managers
         {
             if (IsGameOver)
             {
-                GameFinished?.Invoke(HasWon ? GameStatus.Win : GameStatus.Lose);
+                GameFinished?.Invoke(HasWon ? GameState.Win : GameState.Lose);
             }
         }
 

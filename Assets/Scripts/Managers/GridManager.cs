@@ -22,6 +22,8 @@ namespace Managers
         // Match cache
         private Dictionary<Vector2Int, List<LinkableChip>> _matchCache;
 
+        public bool AreAllChipsPlaced { get; private set; } = false;
+
         public void Init(
             int columns,
             int rows,
@@ -82,6 +84,7 @@ namespace Managers
 
         public void CheckMatchAndRefill(List<LinkableChip> link)
         {
+            AreAllChipsPlaced = false;
             RemoveLinkedChips(link);
             ApplyGravityAndRefill();
         }
@@ -105,7 +108,11 @@ namespace Managers
         private void RefillAfterGravity()
         {
             _refiller.SpawnNewChips(this, _chipPool, transform.position)
-                .OnComplete(EnsureMatch);
+                .OnComplete(()=>
+                {
+                    AreAllChipsPlaced = true;
+                    EnsureMatch();
+                });
         }
 
         public void ClearGrid()

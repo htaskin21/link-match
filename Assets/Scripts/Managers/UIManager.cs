@@ -17,7 +17,7 @@ namespace Managers
         public void Init(LevelDataSO levelData, GameRuleManager gameRuleManager, GameStateManager gameStateManager)
         {
             _upperBarCanvas.Init(levelData.MoveAmount, levelData.ReqWinScore, gameRuleManager);
-            _endGameCanvas.Init(gameRuleManager, gameStateManager);
+            _endGameCanvas.Init(gameStateManager);
         }
     }
 }

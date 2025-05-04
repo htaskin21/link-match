@@ -1,4 +1,5 @@
 using Cores;
+using Managers;
 using UnityEngine;
 
 namespace Links
@@ -8,17 +9,19 @@ namespace Links
         private Camera _camera;
         private int _activeFingerId = -1;
         public LinkManager LinkManager { get; private set; }
+        private GameStateManager _gameStateManager;
         public bool IsLinking { get; private set; }
 
-        public void Init(Camera mainCamera, LinkManager linkManager)
+        public void Init(Camera mainCamera, LinkManager linkManager, GameStateManager gameStateManager)
         {
             _camera = mainCamera;
             LinkManager = linkManager;
+            _gameStateManager = gameStateManager;
         }
 
         private void Update()
         {
-            if (Input.touchCount > 0)
+            if (Input.touchCount > 0 && _gameStateManager.CurrentGameState == GameState.Playing)
             {
                 var touch = Input.GetTouch(0);
                 HandleTouch(touch);

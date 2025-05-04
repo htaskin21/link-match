@@ -22,32 +22,30 @@ namespace UI
 
         private GameRuleManager _gameRuleManager;
 
-        public void Init(GameRuleManager gameRuleManager, GameStateManager gameStateManager)
+        public void Init(GameStateManager gameStateManager)
         {
-            _gameRuleManager = gameRuleManager;
-            _gameRuleManager.GameFinished += ShowEndGamePanel;
             _restartButton.onClick.AddListener(gameStateManager.RestartGame);
             _nextLevelButton.onClick.AddListener(gameStateManager.PlayNextLevel);
         }
 
-        private void ShowEndGamePanel(GameStatus gameStatus)
+        public void ShowEndGamePanel(GameState gameState)
         {
-            SetEndGamePanel(gameStatus);
+            SetEndGamePanel(gameState);
             _canvas.gameObject.SetActive(true);
         }
 
-        private void SetEndGamePanel(GameStatus gameStatus)
+        private void SetEndGamePanel(GameState gameState)
         {
-            switch (gameStatus)
+            switch (gameState)
             {
-                case GameStatus.Win:
+                case GameState.Win:
                     PrepareWinEndGamePanel();
                     break;
-                case GameStatus.Lose:
+                case GameState.Lose:
                     PrepareLoseEndGamePanel();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(gameStatus), gameStatus, null);
+                    throw new ArgumentOutOfRangeException(nameof(gameState), gameState, null);
             }
         }
 

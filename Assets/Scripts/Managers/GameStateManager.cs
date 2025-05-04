@@ -14,6 +14,9 @@ namespace Managers
         private readonly TilePool _tilePool;
         private readonly LevelManager _levelManager;
 
+        public GameState CurrentGameState { get; private set; } = GameState.Preparing;
+
+
         public GameStateManager(GameManager gameManager, GridManager gridManager, GameRuleManager gameRuleManager,
             UIManager uiManager,
             CameraController cameraController, LinkableChipPool linkableChipPool, TilePool tilePool)
@@ -25,18 +28,23 @@ namespace Managers
             _cameraController = cameraController;
             _linkableChipPool = linkableChipPool;
             _tilePool = tilePool;
+
+            _gameRuleManager.GameFinished += SetGameState;
         }
 
         public void RestartGame()
         {
+            CurrentGameState = GameState.Preparing;
             var levelDataSo = _gameManager.CurrentLevel;
             _gameRuleManager.Reset(levelDataSo.MoveAmount, levelDataSo.ReqWinScore);
             _gridManager.ShuffleUntilMatch();
             _uiManager.EndGameCanvas.ToggleCanvas(false);
+            CurrentGameState = GameState.Playing;
         }
 
         public void PlayNextLevel()
         {
+            CurrentGameState = GameState.Preparing;
             _gameManager.SetRandomLevel();
             var levelDataSo = _gameManager.CurrentLevel;
 
@@ -59,6 +67,12 @@ namespace Managers
             _gameRuleManager.Reset(levelDataSo.MoveAmount, levelDataSo.ReqWinScore);
             _gridManager.PopulateGrid();
             _uiManager.EndGameCanvas.ToggleCanvas(false);
+            CurrentGameState = GameState.Playing;
+        }
+
+        public void SetGameState(GameState gameState)
+        {
+            CurrentGameState = gameState;
         }
     }
 }

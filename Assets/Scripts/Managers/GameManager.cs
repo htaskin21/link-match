@@ -42,12 +42,16 @@ namespace Managers
         [SerializeField]
         private CameraController _cameraController;
 
+        [SerializeField]
+        private EndGameManager _endGameManager;
+
         // Runtime 
+        public GameStateManager GameStateManager { get; private set; }
         public LevelDataSO CurrentLevel { get; private set; }
         private GameRuleManager _gameRuleManager;
         private IChipMatcher _chipMatcher;
         private BoardShuffler _boardShuffler;
-        private GameStateManager _gameStateManager;
+
 
         private void Start()
         {
@@ -56,11 +60,15 @@ namespace Managers
             CreatePools();
             InitializeBoard();
             InitializeTile();
-            InitializeLinkLogic();
-            _gameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
+            _gameRuleManager = new GameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
+            GameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
                 _cameraController, _linkableChipPool, _tilePool);
-            _uiManager.Init(CurrentLevel, _gameRuleManager, _gameStateManager);
+            InitializeLinkLogic();
+        
+            _uiManager.Init(CurrentLevel, _gameRuleManager, GameStateManager);
+            _endGameManager.Init(_gameRuleManager, _uiManager, _gridManager);
             _gridManager.PopulateGrid();
+            GameStateManager.SetGameState(GameState.Playing);
         }
 
         private void CreatePools()
@@ -93,9 +101,8 @@ namespace Managers
 
         private void InitializeLinkLogic()
         {
-            _gameRuleManager = new GameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
             var linkManager = new LinkManager(_gridManager, _linkVisualController, _gameRuleManager);
-            _linkInputController.Init(_cameraController.Camera, linkManager);
+            _linkInputController.Init(_cameraController.Camera, linkManager, GameStateManager);
         }
 
         public void SetRandomLevel()
