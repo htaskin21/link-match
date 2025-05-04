@@ -20,8 +20,6 @@ namespace UI
         [SerializeField]
         private Button _restartButton;
 
-        private GameRuleManager _gameRuleManager;
-
         public void Init(GameStateManager gameStateManager)
         {
             _restartButton.onClick.AddListener(gameStateManager.RestartGame);
@@ -66,11 +64,6 @@ namespace UI
         public void ToggleCanvas(bool state)
         {
             _canvas.gameObject.SetActive(state);
-        }
-
-        private void OnDestroy()
-        {
-            _gameRuleManager.GameFinished -= ShowEndGamePanel;
         }
     }
 }

@@ -21,11 +21,11 @@ namespace Links
 
         private void Update()
         {
-            if (Input.touchCount > 0 && _gameStateManager.CurrentGameState == GameState.Playing)
-            {
-                var touch = Input.GetTouch(0);
-                HandleTouch(touch);
-            }
+            if (Input.touchCount <= 0) return;
+            if (_gameStateManager.CurrentGameState != GameState.Playing) return;
+
+            var touch = Input.GetTouch(0);
+            HandleTouch(touch);
         }
 
         private void HandleTouch(Touch touch)
