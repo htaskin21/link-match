@@ -4,6 +4,7 @@ using Random = System.Random;
 
 namespace Chips
 {
+    // Provides LinkableChips with assigned icons.
     public class LinkableChipPool : ObjectPool<LinkableChip>
     {
         [SerializeField]

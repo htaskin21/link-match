@@ -3,14 +3,18 @@ using UnityEngine;
 
 namespace Chips
 {
+    // Manages the visual processing of Chips
     public class IconController
     {
-        private readonly SpriteRenderer _spriteRenderer;
         private LinkableChipIconSO _chipIconSo;
+        private readonly SpriteRenderer _spriteRenderer;
+        private readonly Vector3 _localScale;
+        private const float HighlightMultiplier = 1.2f;
 
         public IconController(SpriteRenderer spriteRenderer)
         {
             _spriteRenderer = spriteRenderer;
+            _localScale = _spriteRenderer.transform.localScale;
         }
 
         public void SetIconSO(LinkableChipIconSO chipIconSo)
@@ -23,6 +27,11 @@ namespace Chips
         {
             var particle = ParticleManager.Instance.GetChipParticle();
             particle.PlayAndRelease(ParticleManager.Instance.ChipParticlePool, _chipIconSo.Color, transform.position);
+        }
+
+        public void Highlight(bool on)
+        {
+            _spriteRenderer.transform.localScale = on ? _localScale * HighlightMultiplier : _localScale;
         }
     }
 }

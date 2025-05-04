@@ -8,12 +8,12 @@ namespace Links
 {
     public class LinkManager
     {
-        private readonly List<LinkableChip> _link;
-        private const int MinLinkCount = 3;
-
         private readonly GridManager _gridManager;
         private readonly LinkVisualController _linkVisual;
         private readonly IGameRuler _gameRuleManager;
+       
+        private readonly List<LinkableChip> _link;
+        private const int MinLinkCount = 3;
 
         public LinkManager(GridManager gridManager, LinkVisualController linkVisual, IGameRuler gameRuleManager)
         {
@@ -49,7 +49,7 @@ namespace Links
             {
                 var removed = _link[^1];
                 _link.RemoveAt(_link.Count - 1);
-                removed.Highlight(false);
+                removed.IconController.Highlight(false);
                 _linkVisual.RemoveLastPoint();
                 return true;
             }
@@ -68,7 +68,7 @@ namespace Links
             if (_link.Count == 0 || IsValidNext(chip))
             {
                 _link.Add(chip);
-                chip.Highlight(true);
+                chip.IconController.Highlight(true);
                 _linkVisual.AddPoint(chip.transform.position);
             }
         }
@@ -83,7 +83,7 @@ namespace Links
 
             foreach (var chip in _link)
             {
-                chip.Highlight(false);
+                chip.IconController.Highlight(false);
             }
 
             _link.Clear();

@@ -93,7 +93,7 @@ namespace Managers
         {
             foreach (var chip in link)
             {
-                chip.Destroy();
+                chip.Disable();
                 RemoveItemAt(chip.Position);
                 _chipPool.ReturnToPool(chip);
             }
