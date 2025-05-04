@@ -7,7 +7,7 @@ namespace Managers
     {
         private readonly GameManager _gameManager;
         private readonly GridManager _gridManager;
-        private readonly GameRuleManager _gameRuleManager;
+        private readonly IGameRuler _gameRuleManager;
         private readonly UIManager _uiManager;
         private readonly CameraController _cameraController;
         private readonly LinkableChipPool _linkableChipPool;
@@ -17,7 +17,7 @@ namespace Managers
         public GameState CurrentGameState { get; private set; } = GameState.Preparing;
 
 
-        public GameStateManager(GameManager gameManager, GridManager gridManager, GameRuleManager gameRuleManager,
+        public GameStateManager(GameManager gameManager, GridManager gridManager, IGameRuler gameRuleManager,
             UIManager uiManager,
             CameraController cameraController, LinkableChipPool linkableChipPool, TilePool tilePool)
         {

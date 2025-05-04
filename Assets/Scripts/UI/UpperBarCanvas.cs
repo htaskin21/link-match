@@ -20,9 +20,9 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI _scorePanelAmountText;
 
-        private GameRuleManager _gameRuleManager;
+        private IGameRuler _gameRuleManager;
 
-        public void Init(int moveAmount, int reqScore, GameRuleManager gameRuleManager)
+        public void Init(int moveAmount, int reqScore, IGameRuler gameRuleManager)
         {
             UpdateAmounts(moveAmount, reqScore);
             _gameRuleManager = gameRuleManager;

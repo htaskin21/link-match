@@ -5,11 +5,11 @@ namespace Managers
 {
     public class EndGameManager : MonoBehaviour
     {
-        private GameRuleManager _gameRuleManager;
+        private IGameRuler _gameRuleManager;
         private UIManager _uiManager;
         private GridManager _gridManager;
 
-        public void Init(GameRuleManager gameRuleManager, UIManager uiManager, GridManager gridManager)
+        public void Init(IGameRuler gameRuleManager, UIManager uiManager, GridManager gridManager)
         {
             _gameRuleManager = gameRuleManager;
             _uiManager = uiManager;

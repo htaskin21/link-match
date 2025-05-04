@@ -14,7 +14,7 @@ namespace Managers
 
         public EndGameCanvas EndGameCanvas => _endGameCanvas;
 
-        public void Init(LevelDataSO levelData, GameRuleManager gameRuleManager, GameStateManager gameStateManager)
+        public void Init(LevelDataSO levelData, IGameRuler gameRuleManager, GameStateManager gameStateManager)
         {
             _upperBarCanvas.Init(levelData.MoveAmount, levelData.ReqWinScore, gameRuleManager);
             _endGameCanvas.Init(gameStateManager);

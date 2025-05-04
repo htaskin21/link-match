@@ -48,7 +48,7 @@ namespace Managers
         // Runtime 
         public GameStateManager GameStateManager { get; private set; }
         public LevelDataSO CurrentLevel { get; private set; }
-        private GameRuleManager _gameRuleManager;
+        private IGameRuler _gameRuleManager;
         private IChipMatcher _chipMatcher;
         private BoardShuffler _boardShuffler;
 
@@ -60,7 +60,7 @@ namespace Managers
             CreatePools();
             InitializeBoard();
             InitializeTile();
-            _gameRuleManager = new GameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
+            _gameRuleManager = new StandardGameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
             GameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
                 _cameraController, _linkableChipPool, _tilePool);
             InitializeLinkLogic();

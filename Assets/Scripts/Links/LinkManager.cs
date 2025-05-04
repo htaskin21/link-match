@@ -12,9 +12,9 @@ namespace Links
 
         private readonly GridManager _gridManager;
         private readonly LinkVisualController _linkVisual;
-        private readonly GameRuleManager _gameRuleManager;
+        private readonly IGameRuler _gameRuleManager;
 
-        public LinkManager(GridManager gridManager, LinkVisualController linkVisual, GameRuleManager gameRuleManager)
+        public LinkManager(GridManager gridManager, LinkVisualController linkVisual, IGameRuler gameRuleManager)
         {
             _gridManager = gridManager;
             _linkVisual = linkVisual;
@@ -77,7 +77,7 @@ namespace Links
             if (_link.Count >= MinLinkCount)
             {
                 _gridManager.CheckMatchAndRefill(_link);
-                _gameRuleManager.ResolveLink(_link.Count);
+                _gameRuleManager.ResolveLink(_link);
             }
 
             foreach (var chip in _link)

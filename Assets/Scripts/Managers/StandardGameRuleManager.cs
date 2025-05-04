@@ -1,14 +1,14 @@
 using System;
+using System.Collections.Generic;
+using Chips;
 
 namespace Managers
 {
-    public class GameRuleManager
+    public class StandardGameRuleManager : IGameRuler
     {
-        private EndGameManager _endGameManager;
-        private GameStateManager _gameStateManager;
-        
         private int _remainingMoves;
         private int _currentScore;
+        private const int ScoreMultiplier = 10;
 
         private bool IsGameOver => _remainingMoves <= 0 || _currentScore <= 0;
         private bool HasWon => _currentScore <= 0;
@@ -16,19 +16,20 @@ namespace Managers
         public event Action<int, int> LinkResolved;
         public event Action<GameState> GameFinished;
 
-        public GameRuleManager(int moveAmount, int startScore)
+        public StandardGameRuleManager(int moveAmount, int startScore)
         {
             _remainingMoves = moveAmount;
             _currentScore = startScore;
         }
 
-        public void ResolveLink(int chipCount)
+        public void ResolveLink(List<LinkableChip> chips)
         {
+            var chipCount = chips.Count;
             if (_remainingMoves <= 0 || chipCount <= 0)
                 return;
 
             _remainingMoves--;
-            _currentScore -= chipCount * 10;
+            _currentScore -= chipCount * ScoreMultiplier;
             LinkResolved?.Invoke(_remainingMoves, _currentScore);
 
             CheckGameStatus();
