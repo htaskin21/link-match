@@ -1,4 +1,4 @@
-namespace Managers
+namespace Logic
 {
     public enum GameState
     {
