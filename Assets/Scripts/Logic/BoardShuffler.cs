@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Chips;
 using Cores;
-using Logic;
 using UnityEngine;
 
-namespace Managers
+namespace Logic
 {
     public class BoardShuffler
     {

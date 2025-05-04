@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Chips;
+using Managers;
 
-namespace Managers
+namespace Logic
 {
     public interface IGameRuler
     {

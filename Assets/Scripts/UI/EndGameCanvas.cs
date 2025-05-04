@@ -6,11 +6,8 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class EndGameCanvas : MonoBehaviour
+    public class EndGameCanvas : UICanvas
     {
-        [SerializeField]
-        private Canvas _canvas;
-
         [SerializeField]
         private TextMeshProUGUI _headerText;
 
@@ -29,7 +26,7 @@ namespace UI
         public void ShowEndGamePanel(GameState gameState)
         {
             SetEndGamePanel(gameState);
-            _canvas.gameObject.SetActive(true);
+            Open();
         }
 
         private void SetEndGamePanel(GameState gameState)
