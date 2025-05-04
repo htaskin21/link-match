@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Logic
 {
-    public class ChipMatcher : IChipMatcher
+    public class FourWayChipMatcher : IChipMatcher
     {
         private readonly Vector2Int[] _directions =
         {
@@ -17,7 +17,7 @@ namespace Logic
 
         private readonly int _minMatchCount;
 
-        public ChipMatcher(int minMatchCount = 3)
+        public FourWayChipMatcher(int minMatchCount = 3)
         {
             _minMatchCount = minMatchCount;
         }

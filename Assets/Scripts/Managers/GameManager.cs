@@ -82,7 +82,7 @@ namespace Managers
 
         private void InitializeBoard()
         {
-            var chipMatcher = new ChipMatcher();
+            var chipMatcher = new FourWayChipMatcher();
             var gravityController = new GravityController();
             var boardRefiller = new BoardRefiller();
             var boardShuffler = new BoardShuffler();
