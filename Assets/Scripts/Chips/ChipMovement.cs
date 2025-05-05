@@ -10,7 +10,7 @@ namespace Chips
         private readonly float _speed;
         private readonly Ease _easeType;
 
-        public ChipMovement(float speed = 8f, Ease ease = Ease.Linear)
+        public ChipMovement(float speed = 10f, Ease ease = Ease.Linear)
         {
             _speed = speed;
             _easeType = ease;
