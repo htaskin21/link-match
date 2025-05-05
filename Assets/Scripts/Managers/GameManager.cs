@@ -10,13 +10,15 @@ namespace Managers
     // Entry point that wires up all systems and starts the game
     public class GameManager : MonoBehaviour
     {
-        [Header("Level")]
+        [Header("Core Managers")]
         [SerializeField]
         private LevelManager _levelManager;
 
-        [Header("Tile & Grid")]
         [SerializeField]
         private GridManager _gridManager;
+
+        [SerializeField]
+        private CameraController _cameraController;
 
         [SerializeField]
         private TilePool _tilePool;
@@ -31,49 +33,49 @@ namespace Managers
         [SerializeField]
         private LinkVisualController _linkVisualController;
 
-        [Header("UI")]
+        [Header("UI & VFX")]
         [SerializeField]
         private UIManager _uiManager;
-
-        [Header("Effects & Particles")]
+        
         [SerializeField]
         private ParticleManager _particleManager;
-
-        [Header("Grid")]
-        [SerializeField]
-        private CameraController _cameraController;
-
+        
         [SerializeField]
         private EndGameManager _endGameManager;
-
-
+        
         private GameStateManager _gameStateManager;
-        public LevelDataSO CurrentLevel { get; private set; }
         private IGameRuler _gameRuleManager;
         private IChipMatcher _chipMatcher;
         private BoardShuffler _boardShuffler;
-
+        public LevelDataSO CurrentLevel { get; private set; }
 
         // Initializes all services and begins the first level.
         private void Start()
         {
             CurrentLevel = _levelManager.GetLevelData(0);
-            _cameraController.Setup(CurrentLevel.RowSize, CurrentLevel.ColumnSize);
-            CreatePools();
+            SetupCamera();
+            InitializePools();
             InitializeBoard();
-            InitializeTile();
-            _gameRuleManager = new StandardGameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
-            _gameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
-                _cameraController, _linkableChipPool, _tilePool);
+            InitializeTiles();
             InitializeLinkLogic();
-        
-            _uiManager.Init(CurrentLevel, _gameRuleManager, _gameStateManager);
-            _endGameManager.Init(_gameRuleManager, _uiManager, _gridManager);
-            _gridManager.PopulateGrid();
-            _gameStateManager.SetGameState(GameState.Playing);
+            InitializeUI();
+            StartGame();
         }
 
-        private void CreatePools()
+        public void SetRandomLevel()
+        {
+            CurrentLevel = _levelManager.GetRandomLevel();
+        }
+
+        private void SetupCamera()
+        {
+            _cameraController.Setup(
+                CurrentLevel.RowSize,
+                CurrentLevel.ColumnSize
+            );
+        }
+
+        private void InitializePools()
         {
             _linkableChipPool.Init(CurrentLevel.NumberOfColors);
             var poolSize = CurrentLevel.ColumnSize * CurrentLevel.RowSize * 2;
@@ -93,7 +95,7 @@ namespace Managers
                 gravityController, boardRefiller, boardShuffler);
         }
 
-        private void InitializeTile()
+        private void InitializeTiles()
         {
             var poolSize = CurrentLevel.ColumnSize * CurrentLevel.RowSize;
             _tilePool.CreatePool(poolSize);
@@ -103,13 +105,23 @@ namespace Managers
 
         private void InitializeLinkLogic()
         {
+            _gameRuleManager = new StandardGameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
+            _gameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
+                _cameraController, _linkableChipPool, _tilePool);
             var linkManager = new LinkManager(_gridManager, _linkVisualController, _gameRuleManager);
             _linkInputController.Init(_cameraController.Camera, linkManager, _gameStateManager);
         }
 
-        public void SetRandomLevel()
+        private void InitializeUI()
         {
-            CurrentLevel = _levelManager.GetRandomLevel();
+            _uiManager.Init(CurrentLevel, _gameRuleManager, _gameStateManager);
+            _endGameManager.Init(_gameRuleManager, _uiManager, _gridManager);
+        }
+
+        private void StartGame()
+        {
+            _gridManager.PopulateGrid();
+            _gameStateManager.SetGameState(GameState.Playing);
         }
     }
 }

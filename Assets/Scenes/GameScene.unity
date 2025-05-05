@@ -378,13 +378,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelManager: {fileID: 1151386657}
   _gridManager: {fileID: 375807594}
+  _cameraController: {fileID: 519420033}
   _tilePool: {fileID: 1252670562}
   _linkableChipPool: {fileID: 1034908673}
   _linkInputController: {fileID: 1792713324}
   _linkVisualController: {fileID: 89261386}
   _uiManager: {fileID: 1827031211}
   _particleManager: {fileID: 1930478652}
-  _cameraController: {fileID: 519420033}
   _endGameManager: {fileID: 981582030}
 --- !u!4 &199649983
 Transform:

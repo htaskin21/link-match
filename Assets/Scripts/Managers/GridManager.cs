@@ -12,15 +12,12 @@ namespace Managers
     {
         [SerializeField]
         private Vector2 _offScreenOffset;
-
-        // Dependencies
+        
         private LinkableChipPool _chipPool;
         private IChipMatcher _matcher;
         private GravityController _gravity;
         private BoardRefiller _refiller;
         private BoardShuffler _shuffler;
-
-        // Match cache
         private Dictionary<Vector2Int, List<LinkableChip>> _matchCache;
 
         /// <summary>
