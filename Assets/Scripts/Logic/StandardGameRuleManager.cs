@@ -8,7 +8,6 @@ namespace Logic
     {
         private int _remainingMoves;
         private int _currentScore;
-        private const int ScoreMultiplier = 10;
         private bool IsGameOver => _remainingMoves <= 0 || _currentScore <= 0;
         private bool HasWon => _currentScore <= 0;
 
@@ -31,7 +30,7 @@ namespace Logic
                 return;
 
             _remainingMoves--;
-            _currentScore -= chipCount * ScoreMultiplier;
+            _currentScore -= chipCount;
             var correctedScore = (int)MathF.Max(0, _currentScore);
             LinkResolved?.Invoke(_remainingMoves, correctedScore);
 
