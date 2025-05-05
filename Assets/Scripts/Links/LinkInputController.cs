@@ -24,11 +24,15 @@ namespace Links
 
         private void Update()
         {
-            if (Input.touchCount <= 0) return;
-            if (_gameStateManager.CurrentGameState != GameState.Playing) return;
+            if (_gameStateManager.CurrentGameState != GameState.Playing)
+                return;
 
-            var touch = Input.GetTouch(0);
-            HandleTouch(touch);
+#if UNITY_EDITOR
+            HandleMouse();
+#else
+    if (Input.touchCount > 0)
+        HandleTouch(Input.GetTouch(0));
+#endif
         }
 
         /// <summary>
@@ -87,6 +91,22 @@ namespace Links
             IsLinking = false;
             _linkManager.EndLink();
             _activeFingerId = -1;
+        }
+
+        private void HandleMouse()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                BeginLink(Input.mousePosition);
+            }
+            else if (Input.GetMouseButton(0) && IsLinking)
+            {
+                ContinueLink(Input.mousePosition);
+            }
+            else if (Input.GetMouseButtonUp(0) && IsLinking)
+            {
+                EndLink();
+            }
         }
     }
 }
