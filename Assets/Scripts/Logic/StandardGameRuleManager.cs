@@ -32,7 +32,8 @@ namespace Logic
 
             _remainingMoves--;
             _currentScore -= chipCount * ScoreMultiplier;
-            LinkResolved?.Invoke(_remainingMoves, _currentScore);
+            var correctedScore = (int)MathF.Max(0, _currentScore);
+            LinkResolved?.Invoke(_remainingMoves, correctedScore);
 
             CheckGameStatus();
         }
