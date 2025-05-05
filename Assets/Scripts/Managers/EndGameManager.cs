@@ -9,7 +9,7 @@ namespace Managers
         private IGameRuler _gameRuleManager;
         private UIManager _uiManager;
         private GridManager _gridManager;
-        private const float EndGamePanelShowDelay = 0.2f;
+        private const float EndGamePanelShowDelay = 0.1f;
 
         public void Init(IGameRuler gameRuleManager, UIManager uiManager, GridManager gridManager)
         {

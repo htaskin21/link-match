@@ -3,7 +3,7 @@ using Cores;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Logic
+namespace GridFlow
 {
     // Fills empty grid cells by spawning new chips and animating their fall; returns a Sequence that completes when all chip movements finish.
     public class BoardRefiller

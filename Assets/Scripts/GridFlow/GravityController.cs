@@ -4,7 +4,7 @@ using Cores;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Logic
+namespace GridFlow
 {
     // Applies gravity by dropping chips into empty spaces, returning a Sequence of falling tweens.
     public class GravityController

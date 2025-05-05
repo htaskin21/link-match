@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Logic
+namespace Data
 {
     [CreateAssetMenu(fileName = "Level", menuName = "ScriptableObjects/LevelDataSO", order = 2)]
     public class LevelDataSO : ScriptableObject

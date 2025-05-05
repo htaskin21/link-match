@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Chips;
 using Cores;
+using Matchers;
 using UnityEngine;
 
-namespace Logic
+namespace GridFlow
 {
     // Randomly shuffles existing chips on the grid until at least one valid match is found.
     public class BoardShuffler

@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using Chips;
 using Cores;
 using DG.Tweening;
-using Logic;
+using GridFlow;
+using Matchers;
 using UnityEngine;
 
 namespace Managers
@@ -12,7 +13,7 @@ namespace Managers
     {
         [SerializeField]
         private Vector2 _offScreenOffset;
-        
+
         private LinkableChipPool _chipPool;
         private IChipMatcher _matcher;
         private GravityController _gravity;
@@ -118,7 +119,7 @@ namespace Managers
         private void RefillAfterGravity()
         {
             _refiller.SpawnNewChips(this, _chipPool, transform.position)
-                .OnComplete(()=>
+                .OnComplete(() =>
                 {
                     AreAllChipsPlaced = true;
                     EnsureMatch();

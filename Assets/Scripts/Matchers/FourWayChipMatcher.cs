@@ -4,7 +4,7 @@ using Chips;
 using Cores;
 using UnityEngine;
 
-namespace Logic
+namespace Matchers
 {
     // Finds groups of connected same-color chips in four directions and caches matches.
     public class FourWayChipMatcher : IChipMatcher
