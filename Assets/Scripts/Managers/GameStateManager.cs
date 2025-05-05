@@ -59,7 +59,7 @@ namespace Managers
             _cameraController.Setup(levelDataSo.RowSize, levelDataSo.ColumnSize);
             _gridManager.ClearGrid();
 
-            _linkableChipPool.Init(levelDataSo.NumberOfColors);
+            _linkableChipPool.Init(levelDataSo.NumberOfDifferentChips);
             var poolSize = levelDataSo.ColumnSize * levelDataSo.RowSize * 2;
             _linkableChipPool.IncreasePoolSize(poolSize);
 

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rowSize: 5
   _columnSize: 5
-  _numberOfColors: 3
+  _numberOfDifferentChips: 3
   _moveAmount: 5
-  _reqWinScore: 150
+  _reqWinScore: 15

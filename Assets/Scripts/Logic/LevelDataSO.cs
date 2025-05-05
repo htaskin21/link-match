@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Logic
 {
@@ -15,12 +16,12 @@ namespace Logic
         private int _columnSize;
 
         public int ColumnSize => _columnSize;
-
-        [Header("Linkable Chip Color Amount")]
+        
+        [Header("Number Of Different Chips")]
         [SerializeField]
-        private int _numberOfColors;
+        private int _numberOfDifferentChips;
 
-        public int NumberOfColors => _numberOfColors;
+        public int NumberOfDifferentChips => _numberOfDifferentChips;
 
         [Header("Win Conditions")]
         [SerializeField]

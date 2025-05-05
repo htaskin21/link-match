@@ -36,18 +36,23 @@ namespace Managers
         [Header("UI & VFX")]
         [SerializeField]
         private UIManager _uiManager;
-        
+
         [SerializeField]
         private ParticleManager _particleManager;
-        
+
         [SerializeField]
         private EndGameManager _endGameManager;
-        
+
         private GameStateManager _gameStateManager;
         private IGameRuler _gameRuleManager;
         private IChipMatcher _chipMatcher;
         private BoardShuffler _boardShuffler;
         public LevelDataSO CurrentLevel { get; private set; }
+
+        private void Awake()
+        {
+            Application.targetFrameRate = 120;
+        }
 
         // Initializes all services and begins the first level.
         private void Start()
@@ -77,7 +82,7 @@ namespace Managers
 
         private void InitializePools()
         {
-            _linkableChipPool.Init(CurrentLevel.NumberOfColors);
+            _linkableChipPool.Init(CurrentLevel.NumberOfDifferentChips);
             var poolSize = CurrentLevel.ColumnSize * CurrentLevel.RowSize * 2;
             _linkableChipPool.CreatePool(poolSize);
 
