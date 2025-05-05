@@ -6,11 +6,15 @@ using UnityEngine;
 
 namespace Logic
 {
+    // Applies gravity by dropping chips into empty spaces, returning a Sequence of falling tweens.
     public class GravityController
     {
         private Sequence _fallSequence;
         private readonly List<Tween> _individualTweens = new();
 
+        /// <summary>
+        /// Moves chips down into empty cells with animations and returns a Sequence tracking them.
+        /// </summary>
         public Sequence ApplyGravity(GridSystem<Chip> grid, Vector3 boardOrigin)
         {
             KillActiveTweens();

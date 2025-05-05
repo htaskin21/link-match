@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Tiles
 {
+    // Manages a pool of Tile instances to create or reset the game board's tile grid.
     public class TilePool : ObjectPool<Tile>
     {
-        private readonly Stack<Tile> _tiles = new();
+        private readonly Stack<Tile> _tilesOnBoard = new();
 
         public void CreateTiles(int width, int height, Vector3 boardOrigin)
         {
@@ -17,18 +18,20 @@ namespace Tiles
                     var tile = GetObject();
                     tile.SetPosition(boardOrigin + new Vector3(x, y, 1));
                     tile.gameObject.SetActive(true);
-                    _tiles.Push(tile);
+                    _tilesOnBoard.Push(tile);
                 }
             }
         }
 
+        // Deactivates all active tiles and clears the tracking stack.
         public void Reset()
         {
-            foreach (var tile in _tiles)
+            foreach (var tile in _tilesOnBoard)
             {
                 tile.gameObject.SetActive(false);
+                ReturnToPool(tile);
             }
-            _tiles.Clear();
+            _tilesOnBoard.Clear();
         }
     }
 }

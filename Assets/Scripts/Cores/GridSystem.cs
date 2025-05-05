@@ -95,7 +95,7 @@ namespace Cores
             SwapItemsAt(position1.x, position1.y, position2.x, position2.y);
         }
         
-        protected IEnumerable<Vector2Int> AllPositions()
+        public IEnumerable<Vector2Int> AllPositions()
         {
             for (var y = 0; y < GridSize.y; y++)
             {

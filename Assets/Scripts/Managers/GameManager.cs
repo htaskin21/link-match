@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
+    // Entry point that wires up all systems and starts the game
     public class GameManager : MonoBehaviour
     {
         [Header("Level")]
@@ -45,14 +46,15 @@ namespace Managers
         [SerializeField]
         private EndGameManager _endGameManager;
 
-        // Runtime 
-        public GameStateManager GameStateManager { get; private set; }
+
+        private GameStateManager _gameStateManager;
         public LevelDataSO CurrentLevel { get; private set; }
         private IGameRuler _gameRuleManager;
         private IChipMatcher _chipMatcher;
         private BoardShuffler _boardShuffler;
 
 
+        // Initializes all services and begins the first level.
         private void Start()
         {
             CurrentLevel = _levelManager.GetLevelData(0);
@@ -61,14 +63,14 @@ namespace Managers
             InitializeBoard();
             InitializeTile();
             _gameRuleManager = new StandardGameRuleManager(CurrentLevel.MoveAmount, CurrentLevel.ReqWinScore);
-            GameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
+            _gameStateManager = new GameStateManager(this, _gridManager, _gameRuleManager, _uiManager,
                 _cameraController, _linkableChipPool, _tilePool);
             InitializeLinkLogic();
         
-            _uiManager.Init(CurrentLevel, _gameRuleManager, GameStateManager);
+            _uiManager.Init(CurrentLevel, _gameRuleManager, _gameStateManager);
             _endGameManager.Init(_gameRuleManager, _uiManager, _gridManager);
             _gridManager.PopulateGrid();
-            GameStateManager.SetGameState(GameState.Playing);
+            _gameStateManager.SetGameState(GameState.Playing);
         }
 
         private void CreatePools()
@@ -102,7 +104,7 @@ namespace Managers
         private void InitializeLinkLogic()
         {
             var linkManager = new LinkManager(_gridManager, _linkVisualController, _gameRuleManager);
-            _linkInputController.Init(_cameraController.Camera, linkManager, GameStateManager);
+            _linkInputController.Init(_cameraController.Camera, linkManager, _gameStateManager);
         }
 
         public void SetRandomLevel()

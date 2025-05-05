@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Managers
 {
+    // Provides access to level configuration assets.
     public class LevelManager : MonoBehaviour
     {
         [SerializeField]

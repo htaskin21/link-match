@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Chips;
-using Managers;
 
 namespace Logic
 {
@@ -10,7 +9,6 @@ namespace Logic
         private int _remainingMoves;
         private int _currentScore;
         private const int ScoreMultiplier = 10;
-
         private bool IsGameOver => _remainingMoves <= 0 || _currentScore <= 0;
         private bool HasWon => _currentScore <= 0;
 
@@ -23,6 +21,9 @@ namespace Logic
             _currentScore = startScore;
         }
 
+        /// <summary>
+        /// Handles completion of a link, deducting moves and score, then raising events.
+        /// </summary>
         public void ResolveLink(List<LinkableChip> chips)
         {
             var chipCount = chips.Count;
@@ -44,6 +45,9 @@ namespace Logic
             }
         }
 
+        /// <summary>
+        /// Resets remaining moves and score, firing LinkResolved to update UI.
+        /// </summary>
         public void Reset(int moveAmount, int startScore)
         {
             _remainingMoves = moveAmount;

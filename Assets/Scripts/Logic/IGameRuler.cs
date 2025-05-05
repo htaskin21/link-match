@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Chips;
-using Managers;
 
 namespace Logic
 {
+    // Defines contract for resolving links and notifying state changes and game end.
     public interface IGameRuler
     {
         event Action<int, int> LinkResolved;

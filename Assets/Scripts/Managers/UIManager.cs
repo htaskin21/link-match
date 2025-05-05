@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Managers
 {
+    // Initializes UI components and provides access to end game panel.
     public class UIManager : MonoBehaviour
     {
         [SerializeField]

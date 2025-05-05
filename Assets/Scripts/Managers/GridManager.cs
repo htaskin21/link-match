@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
+    // Manages grid item lifecycle: population, matching, gravity, refill, and shuffle.
     public class GridManager : GridSystem<Chip>
     {
         [SerializeField]
@@ -22,6 +23,9 @@ namespace Managers
         // Match cache
         private Dictionary<Vector2Int, List<LinkableChip>> _matchCache;
 
+        /// <summary>
+        /// Indicates when the board has settled after refill
+        /// </summary>
         public bool AreAllChipsPlaced { get; private set; } = false;
 
         public void Init(
@@ -42,12 +46,18 @@ namespace Managers
             ResizeGrid(columns, rows);
         }
 
+        /// <summary>
+        /// Fills empty cells and ensures at least one match exists.
+        /// </summary>
         public void PopulateGrid()
         {
             FillEmptyCells();
             EnsureMatch();
         }
 
+        /// <summary>
+        /// Instantiates and places a random chip in each empty grid cell.
+        /// </summary>
         private void FillEmptyCells()
         {
             foreach (var pos in AllPositions())
@@ -63,6 +73,9 @@ namespace Managers
             }
         }
 
+        /// <summary>
+        /// Checks current matches and shuffles board if none found.
+        /// </summary>
         private void EnsureMatch()
         {
             _matchCache = _matcher.GenerateMatchCache(this);

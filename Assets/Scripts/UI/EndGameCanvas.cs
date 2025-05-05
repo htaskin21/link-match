@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    // Manages the end-of-game panel UI
     public class EndGameCanvas : UICanvas
     {
         [SerializeField]
@@ -24,12 +25,18 @@ namespace UI
             _nextLevelButton.onClick.AddListener(gameStateManager.PlayNextLevel);
         }
 
+        /// <summary>
+        /// Displays the end-game panel with appropriate header and opens the canvas.
+        /// </summary>
         public void ShowEndGamePanel(GameState gameState)
         {
             SetEndGamePanel(gameState);
             Open();
         }
 
+        /// <summary>
+        /// Sets header text and button visibility based on win or lose state.
+        /// </summary>
         private void SetEndGamePanel(GameState gameState)
         {
             switch (gameState)

@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace Logic
 {
+    // Fills empty grid cells by spawning new chips and animating their fall; returns a Sequence that completes when all chip movements finish.
     public class BoardRefiller
     {
         private Sequence _refillSequence;
 
+        // Animates spawning chips into empty cells and returns a Sequence tracking all moves.
         public Sequence SpawnNewChips(GridSystem<Chip> grid, LinkableChipPool pool, Vector3 boardOrigin)
         {
             _refillSequence?.Kill();

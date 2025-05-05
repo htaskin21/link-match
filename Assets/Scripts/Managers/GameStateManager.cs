@@ -4,6 +4,7 @@ using Tiles;
 
 namespace Managers
 {
+    // Orchestrates transitions between game states like restart and next level.
     public class GameStateManager
     {
         private readonly GameManager _gameManager;
@@ -33,6 +34,9 @@ namespace Managers
             _gameRuleManager.GameFinished += SetGameState;
         }
 
+        /// <summary>
+        /// Resets board and UI to initial level state, then starts playing.
+        /// </summary>
         public void RestartGame()
         {
             CurrentGameState = GameState.Preparing;
@@ -43,6 +47,9 @@ namespace Managers
             CurrentGameState = GameState.Playing;
         }
 
+        /// <summary>
+        /// Advances to a random next level and reinitializes all components.
+        /// </summary>
         public void PlayNextLevel()
         {
             CurrentGameState = GameState.Preparing;

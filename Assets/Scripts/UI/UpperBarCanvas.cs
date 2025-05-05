@@ -1,10 +1,10 @@
 using Logic;
-using Managers;
 using TMPro;
 using UnityEngine;
 
 namespace UI
 {
+    // Displays and updates the remaining moves and current score in the HUD.
     public class UpperBarCanvas : MonoBehaviour
     {
         [Header("Move Panel")]

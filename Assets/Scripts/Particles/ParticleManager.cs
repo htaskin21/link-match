@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Particles
 {
+    // Singleton service that manages particle pools for various effects.
     public class ParticleManager : Singleton<ParticleManager>
     {
         [Header("Chip Particle")]

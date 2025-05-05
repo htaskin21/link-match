@@ -5,6 +5,7 @@ using UnityEngine.UI;
 namespace UI
 {
     [RequireComponent(typeof(Canvas))]
+    // Abstract base class providing open/close animations for UI Canvas panels.
     public abstract class UICanvas : MonoBehaviour
     {
         [Header("References")]

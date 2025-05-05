@@ -5,20 +5,24 @@ using UnityEngine;
 
 namespace Logic
 {
+    // Randomly shuffles existing chips on the grid until at least one valid match is found.
     public class BoardShuffler
     {
         private readonly List<Chip> _chipBuffer = new();
         private readonly List<(Vector3 worldPos, Vector2Int gridPos)> _positionBuffer = new();
 
+        /// <summary>
+        /// Attempts up to maxAttempts to shuffle grid positions until matcher finds a match.
+        /// </summary>
         public Dictionary<Vector2Int, List<LinkableChip>> ShuffleUntilMatch(
             GridSystem<Chip> grid,
             IChipMatcher matcher,
             Transform gridTransform,
-            int maxAttempts = 20)
+            int maxAttempts = 50)
         {
             Collect(grid);
 
-            for (int attempt = 0; attempt < maxAttempts; attempt++)
+            for (var attempt = 0; attempt < maxAttempts; attempt++)
             {
                 ShufflePositions();
                 ClearGrid(grid);
@@ -29,38 +33,40 @@ namespace Logic
                     return result;
             }
 
-            Debug.LogWarning("GridShuffler: Max denemede eşleşme bulunamadı.");
-            return new();
+            return new Dictionary<Vector2Int, List<LinkableChip>>();
         }
 
+        /// <summary>
+        /// Collects all existing LinkableChip instances and their positions.
+        /// </summary>
         private void Collect(GridSystem<Chip> grid)
         {
             _chipBuffer.Clear();
             _positionBuffer.Clear();
 
-            for (int y = 0; y < grid.GridSize.y; y++)
+            foreach (var pos in grid.AllPositions())
             {
-                for (int x = 0; x < grid.GridSize.x; x++)
+                if (grid.GetItemAt(pos) is LinkableChip chip)
                 {
-                    Vector2Int pos = new(x, y);
-                    if (grid.GetItemAt(pos) is LinkableChip chip)
-                    {
-                        _chipBuffer.Add(chip);
-                        _positionBuffer.Add((chip.transform.position, pos));
-                    }
+                    _chipBuffer.Add(chip);
+                    _positionBuffer.Add((chip.transform.position, pos));
                 }
             }
         }
 
+        // Shuffles the saved position buffer in-place using Fisher–Yates algorithm.
         private void ShufflePositions()
         {
-            for (int i = _positionBuffer.Count - 1; i > 0; i--)
+            for (var i = _positionBuffer.Count - 1; i > 0; i--)
             {
-                int j = Random.Range(0, i + 1);
+                var j = Random.Range(0, i + 1);
                 (_positionBuffer[i], _positionBuffer[j]) = (_positionBuffer[j], _positionBuffer[i]);
             }
         }
 
+        /// <summary>
+        /// Clears all buffered chips from the grid data store.
+        /// </summary>
         private void ClearGrid(GridSystem<Chip> grid)
         {
             foreach (var chip in _chipBuffer)
@@ -69,9 +75,12 @@ namespace Logic
             }
         }
 
+        /// <summary>
+        /// Applies shuffled positions back to grid and world transforms.
+        /// </summary>
         private void ApplyShuffled(GridSystem<Chip> grid, Transform gridTransform)
         {
-            for (int i = 0; i < _chipBuffer.Count; i++)
+            for (var i = 0; i < _chipBuffer.Count; i++)
             {
                 var chip = _chipBuffer[i];
                 var (world, gridPos) = _positionBuffer[i];

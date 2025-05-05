@@ -4,11 +4,15 @@ using UnityEngine;
 namespace Particles
 {
     [RequireComponent(typeof(ParticleSystem))]
+    // Plays and recycles a ParticleSystem instance with color customization.
     public class Particle : MonoBehaviour
     {
         [SerializeField]
         private ParticleSystem _particleSystem;
 
+        /// <summary>
+        /// Plays the particle with the given color and position, then returns it to the pool.
+        /// </summary>
         public void PlayAndRelease(ParticlePool pool, Color color, Vector3 position)
         {
             transform.position = position;
@@ -21,6 +25,9 @@ namespace Particles
             StartCoroutine(ReleaseAfter(ps.main.duration + 0.1f, pool));
         }
 
+        /// <summary>
+        /// Waits for the given delay before deactivating and returning to the pool.
+        /// </summary>
         private IEnumerator ReleaseAfter(float delay, ParticlePool pool)
         {
             yield return new WaitForSeconds(delay);
